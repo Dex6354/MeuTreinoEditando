@@ -523,9 +523,9 @@
                 const exercicioPeitoID = 371;
 
                 // Encontra os exercícios na lista carregada (assumindo que cada exercício tem uma propriedade 'id')
-                const exercicioCostas = exerciciosList.find(ex => ex.id === exercicioCostasID);
-                const exercicioPerna = exerciciosList.find(ex => ex.id === exercicioPernaID);
-                const exercicioPeito = exerciciosList.find(ex => ex.id === exercicioPeitoID);
+                const exercicioCostas = exerciciosList.find(ex => ex.codigo === exercicioCostasID);
+                const exercicioPerna = exerciciosList.find(ex => ex.codigo === exercicioPernaID);
+                const exercicioPeito = exerciciosList.find(ex => ex.codigo === exercicioPeitoID);
                 
                 // Função auxiliar para criar um item de treino
                 const createWorkoutItem = (exercise) => {
