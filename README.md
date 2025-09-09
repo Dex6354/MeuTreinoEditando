@@ -1,4 +1,4 @@
-https://dex6354.github.io/MeuTreino/
+https://dex6354.github.io/MeuTreinoV7
 
 Precisa aprimorar:
 
