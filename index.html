@@ -522,7 +522,7 @@
                 const exercicioPernaID = 276;
                 const exercicioPeitoID = 371;
 
-                // Encontra os exercícios na lista carregada (assumindo que cada exercício tem uma propriedade 'id')
+                // Encontra os exercícios na lista carregada usando a propriedade 'codigo'
                 const exercicioCostas = exerciciosList.find(ex => ex.codigo === exercicioCostasID);
                 const exercicioPerna = exerciciosList.find(ex => ex.codigo === exercicioPernaID);
                 const exercicioPeito = exerciciosList.find(ex => ex.codigo === exercicioPeitoID);
@@ -821,6 +821,7 @@
         }
         function closeImageModal() { document.getElementById('image-modal').style.display = 'none'; }
         function saveWorkoutToFile() { const data = JSON.stringify({ workouts, tabNames }, null, 2); const blob = new Blob([data], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); const today = new Date().toISOString().slice(0, 10); a.download = `meu-treino-${today}.json`; a.href = url; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); }
+        
         function loadWorkoutFromFile() {
             const input = document.createElement('input');
             input.type = 'file';
@@ -837,7 +838,16 @@
                             tabNames = loadedData.tabNames;
                             saveAllData();
                             alert('Treinos carregados com sucesso!');
-                            location.reload();
+
+                            // Verifica se a aba atual ainda existe após o carregamento
+                            let tabToShow = currentTab;
+                            if (!workouts[tabToShow]) {
+                                // Se não existir, vai para a primeira aba do novo treino
+                                tabToShow = Object.keys(workouts)[0];
+                            }
+                            // Atualiza a visualização sem recarregar a página
+                            showTab(tabToShow); 
+
                         } else { alert('O arquivo não é um backup de treino válido.'); }
                     } catch (error) { alert('Erro ao carregar o arquivo. Verifique se é um arquivo JSON válido.'); console.error(error); }
                 };
@@ -845,6 +855,7 @@
             };
             input.click();
         }
+
         function showTab(tabId, isInitialLoad = false) {
             currentTab = tabId;
             autocompleteSuggestions.style.display = 'none';
