@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todos Exercícios - Meu Treino</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/Dex6354/MeuTreino/refs/heads/main/Favicon.png" type="image/jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #212121;
+            --card-color: #2c2c2c;
+            --text-color: #f0f0f0;
+            --secondary-text-color: #a0a0a0;
+            --primary-color: #ffc107;
+            --border-radius: 12px;
+            --input-bg-color: #383838;
+            --menu-width: 250px;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
+        *, *::before, *::after { box-sizing: border-box; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--input-bg-color); position: sticky; top: 0; z-index: 10; background-color: var(--bg-color); }
+        .header .menu-icon { font-size: 1.5rem; cursor: pointer; color: var(--primary-color); padding: 5px; }
+        .header .header-link { text-decoration: none; color: inherit; position: absolute; left: 50%; transform: translateX(-50%); }
+        .header .title { font-size: 1.25rem; font-weight: bold; display: flex; align-items: center; }
+        .header .title img { width: 24px; height: 24px; margin-right: 8px; border-radius: 5px; }
+        .header .placeholder { width: 40px; }
+        .side-menu { height: 100%; width: 0; position: fixed; z-index: 1001; top: 0; left: 0; background-color: var(--card-color); overflow-x: hidden; transition: 0.3s; padding-top: 60px; box-shadow: 2px 0 5px rgba(0,0,0,0.5); display: flex; flex-direction: column; }
+        .side-menu.open { width: var(--menu-width); }
+        .side-menu .close-btn { position: absolute; top: 15px; right: 25px; font-size: 2rem; color: var(--primary-color); cursor: pointer; }
+        .side-menu a { padding: 15px 20px; text-decoration: none; font-size: 1.1rem; color: var(--text-color); display: block; transition: 0.3s; border-bottom: 1px solid var(--input-bg-color); }
+        .side-menu a:hover { background-color: #575757; color: var(--primary-color); }
+
+        /* Correção para remover a linha divisória do botão de fechar e do link do anúncio */
+        .side-menu .close-btn,
+        .sponsorship-box a {
+            border-bottom: none;
+        }
+
+        .side-menu .sponsorship-box { margin-top: auto; padding: 20px; text-align: center; width: 100%; }
+        .side-menu .sponsorship-box img { max-width: 100%; border-radius: var(--border-radius); width: 100%; }
+        #page-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; display: none; transition: opacity 0.3s; }
+        #page-overlay.show { display: block; }
+
+        .container { padding: 20px; max-width: 1200px; margin: 0 auto; flex-grow: 1; }
+        .search-container { margin-bottom: 20px; position: relative; }
+        #search-input { width: 100%; padding: 12px 15px; background-color: var(--input-bg-color); border: 1px solid transparent; border-radius: 8px; color: var(--text-color); font-size: 1rem; transition: border-color 0.3s; }
+        #search-input:focus { outline: none; border-color: var(--primary-color); }
+        #exercise-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+        .exercise-item { background-color: var(--card-color); border-radius: var(--border-radius); overflow: hidden; text-align: center; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+        .exercise-item:hover { transform: translateY(-5px); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .exercise-item img { width: 100%; height: 150px; object-fit: cover; border-bottom: 1px solid var(--input-bg-color); }
+        .exercise-info { padding: 10px; width: 100%; }
+        .exercise-info h3 { margin: 0; font-size: 1rem; color: var(--primary-color); }
+        .exercise-info p { margin: 5px 0 0; font-size: 0.85rem; color: var(--secondary-text-color); }
+        .footer { text-align: center; padding: 8px 16px; color: var(--secondary-text-color); font-size: 0.875rem; background-color: #282828; margin-top: auto; width: 100%; }
+        @media (max-width: 600px) {
+            #exercise-list { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+            .side-menu.open { width: min(var(--menu-width), 80vw); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="side-menu" class="side-menu">
+        <a href="javascript:void(0)" class="close-btn">&times;</a>
+        <a href="index.html">Meu Treino</a>
+        <a href="todos_exercicios.html">Todos Exercícios</a>
+        <a href="personal.html">Personal Trainer</a>
+        <a href="sobre.html">Sobre</a>
+        <div class="sponsorship-box">
+            <a href="https://wa.me/+5511999999999?text=Olá%2C%20gostaria%20de%20saber%20mais%20sobre%20como%20anunciar%20meu%20perfil%20no%20app%20Meu%20Treino." target="_blank">
+                <img src="https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/anuncie_aqui.gif" alt="Anuncie Aqui">
+            </a>
+        </div>
+    </div>
+    <div id="page-overlay" onclick="closeNav()"></div>
+
+    <div id="main-content-wrapper">
+        <div class="header">
+            <span class="menu-icon" onclick="openNav()">&#9776;</span>
+            <a href="index.html" class="header-link">
+                <span class="title">
+                    <img src="https://raw.githubusercontent.com/Dex6354/MeuTreino/refs/heads/main/IconeTreino.jpg" alt="Ícone de Treino">
+                    Meu Treino
+                </span>
+            </a>
+            <span class="placeholder"></span>
+        </div>
+        
+        <div class="container">
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Buscar exercício...">
+            </div>
+            <div id="exercise-list"></div>
+        </div>
+        
+        <footer class="footer">
+            Feito por quem treina, para quem treina. 💪❤️
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sideMenu = document.getElementById("side-menu");
+            const pageOverlay = document.getElementById("page-overlay");
+            const searchInput = document.getElementById('search-input');
+            const exerciseListContainer = document.getElementById('exercise-list');
+            let allExercises = [];
+
+            function openNav() {
+                sideMenu.classList.add('open');
+                pageOverlay.classList.add('show');
+            }
+            function closeNav() {
+                sideMenu.classList.remove('open');
+                pageOverlay.classList.remove('show');
+            }
+            document.querySelector('.menu-icon').onclick = openNav;
+            document.querySelector('.close-btn').onclick = closeNav;
+            pageOverlay.onclick = closeNav;
+            document.addEventListener('keydown', (event) => { if (event.key === "Escape") closeNav(); });
+
+            async function fetchExercises() {
+                try {
+                    const response = await fetch('exercicios_completo.json');
+                    if (!response.ok) throw new Error(`Erro HTTP! status: ${response.status}`);
+                    allExercises = await response.json();
+                    renderExercises(allExercises);
+                } catch (error) {
+                    console.error("Não foi possível carregar o arquivo de exercícios:", error);
+                    exerciseListContainer.innerHTML = '<p style="color: var(--secondary-text-color);">Erro ao carregar a lista de exercícios. Tente novamente mais tarde.</p>';
+                }
+            }
+
+            function renderExercises(exercisesToRender) {
+                exerciseListContainer.innerHTML = '';
+                if (exercisesToRender.length === 0) {
+                    exerciseListContainer.innerHTML = '<p style="color: var(--secondary-text-color);">Nenhum exercício encontrado.</p>';
+                }
+                const defaultImage = "https://raw.githubusercontent.com/Dex6354/MeuTreino/refs/heads/main/IconeTreino.jpg";
+                exercisesToRender.forEach(ex => {
+                    const item = document.createElement('div');
+                    item.className = 'exercise-item';
+                    item.innerHTML = `
+                        <img src="${ex.gif_url || defaultImage}" alt="${ex.nome}" onerror="this.src='${defaultImage}'">
+                        <div class="exercise-info">
+                            <h3>${ex.nome}</h3>
+                            <p>${ex.grupoMuscular || 'Não especificado'}</p>
+                        </div>
+                    `;
+                    exerciseListContainer.appendChild(item);
+                });
+            }
+
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const filteredExercises = allExercises.filter(ex => 
+                    ex.nome.toLowerCase().includes(searchTerm) ||
+                    (ex.grupoMuscular && ex.grupoMuscular.toLowerCase().includes(searchTerm))
+                );
+                renderExercises(filteredExercises);
+            });
+
+            fetchExercises();
+        });
+    </script>
+</body>
+</html>

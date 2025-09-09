@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Trainer - Meu Treino</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/Dex6354/MeuTreino/refs/heads/main/Favicon.png" type="image/jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos base e do cabeçalho de sobre.html */
+        :root {
+            --bg-color: #212121;
+            --card-color: #2c2c2c;
+            --text-color: #f0f0f0;
+            --secondary-text-color: #a0a0a0;
+            --primary-color: #ffc107;
+            --border-radius: 12px;
+            --input-bg-color: #383838;
+            --menu-width: 250px;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
+        *, *::before, *::after { box-sizing: border-box; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--input-bg-color); position: sticky; top: 0; z-index: 10; background-color: var(--bg-color); }
+        .header .menu-icon { font-size: 1.5rem; cursor: pointer; color: var(--primary-color); padding: 5px; }
+        .header .header-link { text-decoration: none; color: inherit; position: absolute; left: 50%; transform: translateX(-50%); }
+        .header .title { font-size: 1.25rem; font-weight: bold; display: flex; align-items: center; }
+        .header .title img { width: 24px; height: 24px; margin-right: 8px; border-radius: 5px; }
+        .header .placeholder { width: 40px; }
+        .side-menu { height: 100%; width: 0; position: fixed; z-index: 1001; top: 0; left: 0; background-color: var(--card-color); overflow-x: hidden; transition: 0.3s; padding-top: 60px; box-shadow: 2px 0 5px rgba(0,0,0,0.5); display: flex; flex-direction: column; }
+        .side-menu.open { width: var(--menu-width); }
+        .side-menu .close-btn { position: absolute; top: 15px; right: 25px; font-size: 2rem; color: var(--primary-color); cursor: pointer; }
+        .side-menu a { padding: 15px 20px; text-decoration: none; font-size: 1.1rem; color: var(--text-color); display: block; transition: 0.3s; border-bottom: 1px solid var(--input-bg-color); }
+        .side-menu a:hover { background-color: #575757; color: var(--primary-color); }
+        .side-menu .close-btn,
+        .sponsorship-box a {
+            border-bottom: none;
+        }
+        .side-menu .sponsorship-box { margin-top: auto; padding: 20px; text-align: center; width: 100%; }
+        .side-menu .sponsorship-box img { max-width: 100%; border-radius: var(--border-radius); width: 100%; }
+        #page-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; display: none; transition: opacity 0.3s; }
+        #page-overlay.show { display: block; }
+        
+        /* Estilos específicos do conteúdo de personal.html */
+        .container {
+            flex-grow: 1;
+            padding: 20px;
+            max-width: 900px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 2rem;
+        }
+        .personal-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            background-color: var(--card-color);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+        .personal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+        }
+        .personal-card img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 4px solid var(--primary-color);
+        }
+        .personal-card h2 {
+            color: var(--text-color);
+            font-size: 1.8rem;
+            margin: 0 0 8px;
+            font-weight: 600;
+        }
+        .personal-card p {
+            color: var(--secondary-text-color);
+            margin: 0 0 15px;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        .contact-links a {
+            color: var(--primary-color);
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 2rem;
+            transition: color 0.3s;
+        }
+        .contact-links a:hover {
+            color: #ffd766;
+        }
+        .ad-card {
+            background: none;
+            border: 2px dashed var(--primary-color);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .ad-card:hover {
+            background-color: var(--input-bg-color);
+        }
+        .ad-card h2 {
+            color: var(--primary-color);
+        }
+        .ad-card .contact-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Estilo do rodapé de sobre.html */
+        .footer { text-align: center; padding: 8px 16px; color: var(--secondary-text-color); font-size: 0.875rem; background-color: #282828; margin-top: auto; width: 100%; }
+        
+        /* Media Queries */
+        @media (max-width: 600px) {
+            .side-menu.open {
+                width: min(var(--menu-width), 80vw);
+            }
+            .personal-card img {
+                width: 120px;
+                height: 120px;
+            }
+            .personal-card h2 {
+                font-size: 1.5rem;
+            }
+            .personal-card p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="side-menu" class="side-menu">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeNav()">&times;</a>
+        <a href="index.html">Meu Treino</a>
+        <a href="todos_exercicios.html">Todos Exercícios</a>
+        <a href="personal.html">Personal Trainer</a>
+        <a href="sobre.html">Sobre</a>
+        <div class="sponsorship-box">
+            <a href="https://wa.me/+5511999999999?text=Olá%2C%20gostaria%20de%20saber%20mais%20sobre%20como%20anunciar%20meu%20perfil%20no%20app%20Meu%20Treino." target="_blank">
+                <img src="https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/anuncie_aqui.gif" alt="Anuncie Aqui">
+            </a>
+        </div>
+    </div>
+    <div id="page-overlay" onclick="closeNav()"></div>
+
+    <div id="main-content-wrapper">
+        <div class="header">
+            <span class="menu-icon" onclick="openNav()">&#9776;</span>
+            <a href="index.html" class="header-link">
+                <span class="title">
+                    <img src="https://raw.githubusercontent.com/Dex6354/MeuTreino/refs/heads/main/IconeTreino.jpg" alt="Ícone de Treino">
+                    Meu Treino
+                </span>
+            </a>
+            <span class="placeholder"></span>
+        </div>
+
+        <div class="container">
+            <h1>Escolha um Personal Trainer</h1>
+            <p style="color: var(--secondary-text-color);">Os profissionais estão prontos para te ajudar a alcançar seus objetivos fitness com planos personalizados e acompanhamento dedicado.</p>
+
+            <div class="personal-card">
+                <img src="https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/personal1.gif" alt="Foto do Personal Trainer João Silva">
+                <h2>João Silva</h2>
+                <p>Especialista em ganho de massa muscular e treinamento de força.</p>
+                <p><b>Experiência:</b> 10 anos</p>
+                <div class="contact-links">
+                    <a href="https://wa.me/+5511999999999?text=Olá%2C%20gostaria%20de%20saber%20mais%20sobre%20como%20anunciar%20meu%20perfil%20no%20app%20Meu%20Treino." target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/fitdance/" target="_blank"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <div class="personal-card">
+                <img src="https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/personal1.gif" alt="Foto da Personal Trainer Maria Souza">
+                <h2>Maria Souza</h2>
+                <p>Focada em emagrecimento, condicionamento físico e bem-estar.</p>
+                <p><b>Experiência:</b> 8 anos</p>
+                <div class="contact-links">
+                    <a href="https://wa.me/+5511999999999?text=Olá%2C%20gostaria%20de%20saber%20mais%20sobre%20como%20anunciar%20meu%20perfil%20no%20app%20Meu%20Treino." target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://www.instagram.com/fitdance/" target="_blank"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+
+            <div class="personal-card ad-card" onclick="window.open('https://wa.me/+5511999999999?text=Olá%2C%20gostaria%20de%20saber%20mais%20sobre%20como%20anunciar%20meu%20perfil%20no%20app%20Meu%20Treino.', '_blank');">
+                <h2>Anuncie Seu Perfil Aqui</h2>
+                <p>Quer aparecer para milhares de usuários e conseguir novos alunos? Clique aqui para saber mais.</p>
+                <div class="contact-links">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            Feito por quem treina, para quem treina. 💪❤️
+        </footer>
+    </div>
+
+    <script>
+        function openNav() {
+            document.getElementById("side-menu").classList.add('open');
+            document.getElementById("page-overlay").classList.add('show');
+        }
+        function closeNav() {
+            document.getElementById("side-menu").classList.remove('open');
+            document.getElementById("page-overlay").classList.remove('show');
+        }
+        document.addEventListener('keydown', (event) => { if (event.key === "Escape") closeNav(); });
+    </script>
+</body>
+</html>
