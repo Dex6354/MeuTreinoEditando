@@ -142,7 +142,6 @@
             color: var(--primary-color);
         }
 
-        /* Remove a linha de baixo do botão de fechar e do link de patrocínio */
         .side-menu .close-btn,
         .sponsorship-box a {
             border-bottom: none;
@@ -234,7 +233,6 @@
             margin: 0;
             padding: 0;
         }
-        /* Cor amarela para o texto do título da aba ativa */
         .tabs .tab-link.active .tab-title {
             color: var(--primary-color);
         }
@@ -301,13 +299,18 @@
         }
         .exercise-card.sortable-chosen { background-color: #4CAF50; transform: scale(1.05); box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); }
         .exercise-card .video-placeholder { min-width: var(--image-size-desktop); height: var(--image-size-desktop); background-color: #000; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border-radius: var(--border-radius); overflow: hidden; position: relative; cursor: pointer; }
-        .exercise-card .video-placeholder img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.2s ease-in-out; border-radius: var(--border-radius); }
+        .exercise-card .video-placeholder img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: transform 0.2s ease-in-out; 
+            border-radius: var(--border-radius); 
+        }
         .exercise-card .video-placeholder .error-message { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--secondary-text-color); font-size: 0.8rem; display: none; text-align: center; padding: 5px; }
         .exercise-card .content { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; position: relative; }
         .exercise-card .content .name-container { 
             position: relative; 
             width: 100%; 
-            /* Aumento do padding para evitar sobreposição com o switch */
             padding-right: 50px; 
         }
         .exercise-card .content .name-container h3 { margin: 0 0 8px 0; font-size: 1rem; font-weight: bold; word-wrap: break-word; word-break: break-word; }
@@ -352,17 +355,7 @@
         .image-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.9); z-index: 1000; justify-content: center; overflow-y: auto; padding: 20px; }
         .image-modal-content { background-color: var(--card-color); border-radius: var(--border-radius); padding: 20px; display: flex; flex-direction: column; align-items: center; width: 90%; max-width: 500px; gap: 20px; max-height: 90vh; overflow-y: auto; position: relative; }
         .image-modal img { max-width: 100%; height: auto; border-radius: var(--border-radius); object-fit: contain; }
-        /* Centraliza o título do modal */
-        #modal-title {
-            text-align: center;
-            color: var(--primary-color); /* Mantém a cor original */
-            font-size: 1.5rem; /* Ajuste o tamanho da fonte se necessário */
-            margin-top: 10px; /* Espaçamento entre a imagem e o título */
-            margin-bottom: 20px; /* Espaçamento entre o título e a descrição */
-            border-bottom: none; /* Remove a linha de baixo se não quiser no título */
-            padding-bottom: 0;
-            width: 100%; /* Ocupa a largura total para centralizar */
-        }
+        #modal-title { text-align: center; color: var(--primary-color); font-size: 1.5rem; margin-top: 10px; margin-bottom: 20px; border-bottom: none; padding-bottom: 0; width: 100%; }
         .modal-text-content { width: 100%; text-align: left; }
         .modal-text-content h3 { margin: 0; color: var(--primary-color); font-size: 1.1rem; border-bottom: 1px solid var(--input-bg-color); padding-bottom: 5px; margin-bottom: 10px; }
         .modal-text-content p { margin: 0 0 10px; color: var(--text-color); font-size: 0.9rem; }
@@ -375,10 +368,21 @@
         .last-workout-info p { margin: 0; color: var(--secondary-text-color); }
         .last-workout-info span { color: var(--primary-color); font-weight: bold; }
 
+        /* --- INÍCIO: AJUSTES PARA TELAS MENORES --- */
         @media (max-width: 600px) {
             .exercise-card { flex-direction: row; align-items: flex-start; }
-            .exercise-card .video-placeholder { min-width: var(--image-size-mobile); height: var(--image-size-mobile); }
-            .exercise-card .content { padding: 8px; }
+            .exercise-card .video-placeholder { 
+                min-width: var(--image-size-mobile); 
+                height: var(--image-size-mobile); 
+                max-width: var(--image-size-mobile); /* Incorporando seu ajuste */
+            }
+            .exercise-card .content { 
+                padding: 4px 8px; /* Incorporando seu ajuste */
+            }
+            .exercise-card .content .name-container h3 {
+                margin-bottom: 12px; /* NOVO: Mais espaço abaixo do nome */
+                line-height: 1.3;      /* NOVO: Mais espaço vertical para o texto */
+            }
             .details { gap: 4px; justify-content: space-between; align-items: flex-end; }
             .details .input-group { min-width: 60px; flex: 1 1 30%; }
             .details .input-field { padding: 4px 6px; }
@@ -388,7 +392,78 @@
             .fab-button { width: 48px; height: 48px; font-size: 1.5rem; }
             .header .title { font-size: 1.25rem; }
             .side-menu.open { width: min(var(--menu-width), 80vw); }
+            
+            .switch-container {
+                top: 5px;   /* NOVO: Move o botão para cima */
+                right: 5px; /* NOVO: Ajusta o botão no canto */
+            }
         }
+        /* --- FIM: AJUSTES PARA TELAS MENORES --- */
+
+
+        /* --- INÍCIO: AJUSTES PARA SMARTWATCH --- */
+        @media (max-width: 320px) {
+            :root {
+                --image-size-mobile: 80px; 
+            }
+
+            .header .title {
+                font-size: 1.1rem;
+            }
+
+            .exercise-card .video-placeholder {
+                min-width: var(--image-size-mobile);
+                height: var(--image-size-mobile);
+            }
+
+            .exercise-card .content {
+                padding: 6px;
+            }
+            
+            .exercise-card .content .name-container h3 {
+                font-size: 0.9rem;
+                margin-bottom: 4px;
+            }
+
+            .details .input-group {
+                min-width: 55px;
+            }
+
+            .details .input-field input {
+                width: 35px;
+                font-size: 0.8rem;
+            }
+            
+            .details .input-group label {
+                font-size: 0.7rem;
+            }
+
+            /* --- Ajustes para o Modal de Zoom da Imagem --- */
+            .image-modal-content {
+                width: 95%;
+                padding: 10px;
+                gap: 10px;
+                max-height: 95vh;
+            }
+
+            #modal-title {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+
+            .modal-text-content h3 {
+                font-size: 1rem;
+                padding-bottom: 3px;
+                margin-bottom: 6px;
+            }
+
+            .modal-text-content p,
+            .modal-text-content li {
+                font-size: 0.85rem;
+                line-height: 1.4;
+            }
+        }
+        /* --- FIM: AJUSTES PARA SMARTWATCH --- */
     </style>
 </head>
 <body>
