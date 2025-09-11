@@ -16,4 +16,4 @@ E altere o valor predefinido "10" repetições dos exercícios, para "12" repeti
 Aprimorado para telas pequenas
 
 
-[![Hits](https://hits.sh/hits.sh/3139fffb-8124-4b59-8b75-349060517718-00-btff5t3jp01r.worf.replit.dev.svg?view=today-total&label=Total%20de%20Treinos&color=ffc107&labelColor=a0a0a0)](https://hits.sh/hits.sh/3139fffb-8124-4b59-8b75-349060517718-00-btff5t3jp01r.worf.replit.dev/)
+[![Hits](https://hits.sh/gymbr.github.io/meutreino.svg?view=today-total&label=Total%20de%20Treinos&color=ffc107&labelColor=a0a0a0)](https://hits.sh/gymbr.github.io/meutreino/)
