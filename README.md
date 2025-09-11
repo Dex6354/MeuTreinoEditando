@@ -1,7 +1,5 @@
 https://dex6354.github.io/MeuTreinoV7
 
-Precisa aprimorar:
-
 Agora, quando um novo dispositivo acessar o site, deixe predefinido os exericios em cada aba:
 
 A (Costas)
@@ -14,3 +12,5 @@ C (Peito)
 371
 
 E altere o valor predefinido "10" repetições dos exercícios, para "12" repetições
+
+Aprimorado para telas pequenas
