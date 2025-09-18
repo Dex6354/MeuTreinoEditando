@@ -23,5 +23,25 @@ Aprimorado para telas pequenas
 <p align="center">
   <img src="link_da_imagem1.png" width="200"/>
   <img src="link_da_imagem2.png" width="200"/>
-  <img src="link_da_imagem3.png" width="200"/>
+  <img src="link_da_imagem3.png" 
+    
+    
+    [⬅️](link_da_imagem_anterior.png)  
+<img src="link_da_imagem_atual.png" width="300"/>  
+[➡️](link_da_proxima_imagem.png)
+width="200"/>
 </p>
+
+
+
+
+
+<details>
+  <summary>📸 Ver Imagem 1</summary>
+  <img src="link_da_imagem1.png" width="400"/>
+</details>
+
+<details>
+  <summary>📸 Ver Imagem 2</summary>
+  <img src="link_da_imagem2.png" width="400"/>
+</details>
