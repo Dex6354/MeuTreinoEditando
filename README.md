@@ -23,15 +23,14 @@ Aprimorado para telas pequenas
 <p align="center">
   <img src="img/Screenshot1.jpg" width="200"/>
   <img src="img/Screenshot2.jpg" width="200"/>
-  <img src="img/Screenshot3.jpg" 
-    </p>
+  <img src="img/Screenshot3.jpg" width="200"/>
+</p>
     
-  <p>
-    [⬅️](https://raw.githubusercontent.com/Dex6354/MeuTreinoV7/refs/heads/main/img/Screenshot1.jpg)  
+
+[⬅️](img/Screenshot2.jpg)  
 <img src="img/Screenshot2.jpg" width="300"/>  
 [➡️](img/Screenshot3.jpg)
-width="200"/>
-</p>
+
 
 
 
