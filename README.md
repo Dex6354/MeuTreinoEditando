@@ -27,7 +27,7 @@ Aprimorado para telas pequenas
     </p>
     
   <p>
-    [⬅️](img/Screenshot1.jpg)  
+    [⬅️](https://raw.githubusercontent.com/Dex6354/MeuTreinoV7/refs/heads/main/img/Screenshot1.jpg)  
 <img src="img/Screenshot2.jpg" width="300"/>  
 [➡️](img/Screenshot3.jpg)
 width="200"/>
