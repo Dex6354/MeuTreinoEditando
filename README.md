@@ -1,15 +1,6 @@
 https://dex6354.github.io/MeuTreinoV7
 
-Agora, quando um novo dispositivo acessar o site, deixe predefinido os exericios em cada aba:
 
-A (Costas)
-625
-
-B (Perna)
-276
-
-C (Peito)
-371
 
 E altere o valor predefinido "10" repetições dos exercícios, para "12" repetições
 
@@ -25,23 +16,21 @@ Aprimorado para telas pequenas
   <img src="img/Screenshot2.jpg" width="200"/>
   <img src="img/Screenshot3.jpg" width="200"/>
 </p>
-    
-
-[⬅️](img/Screenshot2.jpg)  
-<img src="img/Screenshot2.jpg" width="300"/>  
-[➡️](img/Screenshot3.jpg)
-
-
-
-
 
 
 <details>
-  <summary>📸 Ver Imagem 1</summary>
-  <img src="link_da_imagem1.png" width="400"/>
-</details>
+<summary>Atualizações</summary>
+- Alterar abas de treinos
+- Funciona 100% offline
 
-<details>
-  <summary>📸 Ver Imagem 2</summary>
-  <img src="link_da_imagem2.png" width="400"/>
+Agora, quando um novo dispositivo acessar o site, deixe predefinido os exericios em cada aba:
+
+A (Costas)
+625
+
+B (Perna)
+276
+
+C (Peito)
+371
 </details>
