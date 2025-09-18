@@ -24,11 +24,12 @@ Aprimorado para telas pequenas
   <img src="img/Screenshot1.jpg" width="200"/>
   <img src="img/Screenshot2.jpg" width="200"/>
   <img src="img/Screenshot3.jpg" 
+    </p>
     
-    
-    [⬅️](link_da_imagem_anterior.png)  
-<img src="link_da_imagem_atual.png" width="300"/>  
-[➡️](link_da_proxima_imagem.png)
+  <p>
+    [⬅️](img/Screenshot1.jpg)  
+<img src="img/Screenshot2.jpg" width="300"/>  
+[➡️](img/Screenshot3.jpg)
 width="200"/>
 </p>
 
