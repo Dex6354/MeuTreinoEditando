@@ -46,9 +46,3 @@
     -   Correções de bugs e otimização de performance.
 
 </details>
-
----
-
-<p align="center">
-  <img src="https://hits.sh/Dex6354.github.io/MeuTreinoV7.svg" alt="Hits Counter"/>
-</p>
