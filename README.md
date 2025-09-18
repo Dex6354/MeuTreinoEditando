@@ -21,9 +21,9 @@ Aprimorado para telas pequenas
 [![Hits](https://hits.sh/gymbr.github.io/meutreino.svg?view=today-total&label=Total%20de%20Treinos&color=ffc107&labelColor=a0a0a0)](https://hits.sh/gymbr.github.io/meutreino/)
 
 <p align="center">
-  <img src="link_da_imagem1.png" width="200"/>
-  <img src="link_da_imagem2.png" width="200"/>
-  <img src="link_da_imagem3.png" 
+  <img src="img/Screenshot1.jpg" width="200"/>
+  <img src="img/Screenshot2.jpg" width="200"/>
+  <img src="img/Screenshot3.jpg" 
     
     
     [⬅️](link_da_imagem_anterior.png)  
