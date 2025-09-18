@@ -1,16 +1,5 @@
 https://dex6354.github.io/MeuTreinoV7
 
-
-
-E altere o valor predefinido "10" repetições dos exercícios, para "12" repetições
-
-Aprimorado para telas pequenas
-
-
-[![Hits](https://hits.sh/Dex6354.github.io/MeuTreinoV7.svg?view=today-total&label=Total%20de%20Treinos&color=ffc107&labelColor=a0a0a0)](https://hits.sh/Dex6354.github.io/MeuTreinoV7/)
-
-[![Hits](https://hits.sh/gymbr.github.io/meutreino.svg?view=today-total&label=Total%20de%20Treinos&color=ffc107&labelColor=a0a0a0)](https://hits.sh/gymbr.github.io/meutreino/)
-
 <p align="center">
   <img src="img/Screenshot1.jpg" width="200"/>
   <img src="img/Screenshot2.jpg" width="200"/>
@@ -33,4 +22,11 @@ B (Perna)
 
 C (Peito)
 371
+
+E altere o valor predefinido "10" repetições dos exercícios, para "12" repetições
+
+Aprimorado para telas pequenas
+
+https://hits.sh/Dex6354.github.io/MeuTreinoV7/
+
 </details>
