@@ -30,7 +30,6 @@
 
         .container { padding: 16px; max-width: 1200px; margin: 0 auto; flex-grow: 1; }
 
-        /* --- HEADER E MENU LATERAL (sem alterações) --- */
         .header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--input-bg-color); position: sticky; top: 0; z-index: 10; background-color: var(--bg-color); }
         .header .menu-icon { font-size: 1.5rem; cursor: pointer; color: var(--primary-color); padding: 5px; }
         .header .header-link { text-decoration: none; color: inherit; position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; }
@@ -44,13 +43,26 @@
         #page-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; display: none; }
         #page-overlay.show { display: block; }
         
-        /* --- CONTEÚDO --- */
         .selectors-box { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
         .selector-container { flex: 1; min-width: 250px; }
         .selector-container label { display: block; margin-bottom: 8px; color: var(--secondary-text-color); }
         .selector-container select { width: 100%; padding: 12px; background-color: var(--input-bg-color); border: 1px solid var(--primary-color); border-radius: 8px; color: var(--text-color); font-size: 1rem; cursor: pointer; }
         .selector-container select:disabled { cursor: not-allowed; opacity: 0.5; }
         .selector-container select:focus { outline: none; }
+
+        #download-container { margin-bottom: 24px; }
+        #download-btn {
+            background-color: var(--primary-color);
+            color: #1a1a1a;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+        #download-btn:hover { background-color: #ffda6b; }
         
         #workout-display { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
         .workout-day-card { background-color: var(--card-color); border-radius: var(--border-radius); padding: 16px; }
@@ -103,6 +115,8 @@
                 </div>
             </div>
 
+            <div id="download-container"></div>
+
             <div id="workout-display">
                 <p class="info-message">Selecione um objetivo e um treino para começar.</p>
             </div>
@@ -145,6 +159,10 @@
             }
         ];
 
+        // NOVO: Variáveis para guardar os dados do treino atual
+        let currentWorkoutData = null;
+        let currentWorkoutFilename = null;
+
 
         document.addEventListener('DOMContentLoaded', () => {
             const categorySelect = document.getElementById('category-select');
@@ -176,9 +194,11 @@
         function populateWorkoutSelect(selectedCategoryPrefix) {
             const workoutSelect = document.getElementById('workout-select');
             const display = document.getElementById('workout-display');
+            const downloadContainer = document.getElementById('download-container');
 
             workoutSelect.innerHTML = '<option value="">-- Escolha um treino --</option>';
             display.innerHTML = '<p class="info-message">Selecione um treino na lista acima.</p>';
+            downloadContainer.innerHTML = ''; // Limpa o botão de download ao trocar a categoria
 
             if (!selectedCategoryPrefix) {
                 workoutSelect.disabled = true;
@@ -202,59 +222,65 @@
 
         async function fetchAndRenderWorkout(workoutFile) {
             const display = document.getElementById('workout-display');
+            const downloadContainer = document.getElementById('download-container');
+            
+            // Limpa o conteúdo anterior
             display.innerHTML = '<p class="info-message">Carregando treino...</p>';
+            downloadContainer.innerHTML = '';
+            currentWorkoutData = null;
+            currentWorkoutFilename = null;
 
             try {
                 const response = await fetch(`./treinos/${workoutFile}`);
                 if (!response.ok) throw new Error(`Arquivo não encontrado: ${workoutFile}`);
+                
+                // Clona a resposta para poder ler o JSON e guardar o original
                 const workoutData = await response.json();
+
+                // Guarda os dados e o nome do arquivo para o download
+                currentWorkoutData = workoutData;
+                currentWorkoutFilename = workoutFile;
+
                 renderWorkout(workoutData);
+                createDownloadButton(); // Cria o botão após renderizar o treino
+
             } catch (error) {
                 console.error("Erro ao carregar o treino:", error);
                 display.innerHTML = `<p class="error-message">Ops! Ocorreu um erro ao carregar o treino.</p>`;
             }
         }
-
-        // ==========================================================
-        // CORREÇÃO FINAL APLICADA NESTA FUNÇÃO
-        // ==========================================================
+        
         function renderWorkout(data) {
             const display = document.getElementById('workout-display');
             display.innerHTML = '';
 
-            // 1. Verifica se a propriedade "workouts" existe no JSON
             if (!data.workouts || Object.keys(data.workouts).length === 0) {
                 display.innerHTML = `<p class="info-message">Este arquivo de treino parece estar vazio ou no formato incorreto.</p>`;
                 return;
             }
 
-            // 2. Itera sobre as chaves do objeto "workouts" (ex: "treino-a", "treino-b")
             for (const dayKey in data.workouts) {
                 const dayCard = document.createElement('div');
                 dayCard.className = 'workout-day-card';
                 
-                // 3. Pega o título e subtítulo do objeto "tabNames" usando a mesma chave
                 const titleInfo = data.tabNames[dayKey];
                 const dayTitle = document.createElement('h2');
-                // Combina o título (ex: "A") e o subtítulo (ex: "(Costas/Bíceps...)")
                 dayTitle.textContent = `${titleInfo.title} ${titleInfo.subtitle}`;
                 dayCard.appendChild(dayTitle);
                 
-                // 4. Acessa o array de exercícios para o dia atual
                 const exercisesArray = data.workouts[dayKey];
                 
                 exercisesArray.forEach(exercise => {
                     const exerciseItem = document.createElement('div');
                     exerciseItem.className = 'exercise-item';
 
-                    // 5. Mapeia os nomes das propriedades do JSON para as esperadas pelo HTML
                     const gif_url = exercise.image;
                     const nome = exercise.name;
                     const series = exercise.series;
                     const repeticoes = exercise.reps;
                     
                     exerciseItem.innerHTML = `
-                        <img src="${gif_url}" alt="${nome}" onerror="this.src='https.raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/icone_treino.jpg';">
+                        <img src="${gif_url}" alt="${nome}" onerror="this.src='https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/icone_treino.jpg';">
                         <div class="exercise-details">
                             <p class="exercise-name">${nome}</p>
                             <p class="exercise-meta">Séries: ${series} | Repetições: ${repeticoes}</p>
@@ -265,6 +291,51 @@
 
                 display.appendChild(dayCard);
             }
+        }
+
+        // NOVO: Função para criar o botão de download
+        function createDownloadButton() {
+            const downloadContainer = document.getElementById('download-container');
+            downloadContainer.innerHTML = ''; // Limpa qualquer botão anterior
+
+            if (!currentWorkoutFilename) return;
+
+            const button = document.createElement('button');
+            button.id = 'download-btn';
+            button.textContent = `Baixar Treino (${currentWorkoutFilename})`;
+            button.onclick = downloadCurrentWorkout;
+
+            downloadContainer.appendChild(button);
+        }
+
+        // NOVO: Função que realiza o download do arquivo JSON
+        function downloadCurrentWorkout() {
+            if (!currentWorkoutData || !currentWorkoutFilename) {
+                alert("Não há dados de treino para baixar.");
+                return;
+            }
+
+            // Converte o objeto JSON para uma string formatada
+            const jsonString = JSON.stringify(currentWorkoutData, null, 2);
+            
+            // Cria um "Blob", que é um objeto semelhante a um arquivo
+            const blob = new Blob([jsonString], { type: 'application/json' });
+
+            // Cria uma URL temporária para o Blob
+            const url = URL.createObjectURL(blob);
+
+            // Cria um link (âncora) temporário para iniciar o download
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = currentWorkoutFilename; // Define o nome do arquivo a ser baixado
+            
+            // Adiciona o link ao corpo do documento, clica nele e depois o remove
+            document.body.appendChild(a);
+a.click();
+            document.body.removeChild(a);
+
+            // Libera a URL do Blob da memória
+            URL.revokeObjectURL(url);
         }
     </script>
 
