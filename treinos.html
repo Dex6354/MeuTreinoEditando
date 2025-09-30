@@ -125,7 +125,8 @@
                 "nome": "Emagrecer",
                 "prefixo": "emagrecer",
                 "treinos": [
-                    { "arquivo": "treinos/emagrecer1.json", "titulo": "Emagrecimento - Foco Cardio" },
+                    // CORREÇÃO APLICADA AQUI: removido "treinos/" do nome do arquivo.
+                    { "arquivo": "emagrecer1.json", "titulo": "Emagrecimento - Foco Cardio" },
                     { "arquivo": "emagrecer2.json", "titulo": "Emagrecimento - Alta Intensidade" }
                     // Adicione mais treinos de emagrecimento aqui
                 ]
@@ -210,6 +211,7 @@
             display.innerHTML = '<p class="info-message">Carregando treino...</p>';
 
             try {
+                // Esta função já adiciona o caminho da pasta "treinos/" antes do nome do arquivo.
                 const response = await fetch(`./treinos/${workoutFile}`);
                 if (!response.ok) throw new Error(`Arquivo não encontrado: ${workoutFile}`);
                 const workoutData = await response.json();
