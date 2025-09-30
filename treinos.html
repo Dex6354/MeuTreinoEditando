@@ -18,222 +18,54 @@
             --menu-width: 250px;
         }
 
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
+        *, *::before, *::after { box-sizing: border-box; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            margin: 0; padding: 0; min-height: 100vh;
+            display: flex; flex-direction: column;
         }
 
-        .container {
-            padding: 16px;
-            max-width: 1200px;
-            margin: 0 auto;
-            flex-grow: 1;
-        }
+        .container { padding: 16px; max-width: 1200px; margin: 0 auto; flex-grow: 1; }
 
-        /* --- HEADER --- */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--input-bg-color);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background-color: var(--bg-color);
-        }
-
-        .header .menu-icon {
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--primary-color);
-            padding: 5px;
-        }
-
-        .header .header-link {
-            text-decoration: none;
-            color: inherit;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .header .title {
-            font-size: 1.25rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            white-space: nowrap;
-        }
-
-        .header .title img {
-            width: 24px;
-            height: 24px;
-            margin-right: 8px;
-            border-radius: 5px;
-        }
+        /* --- HEADER E MENU LATERAL (sem alterações) --- */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--input-bg-color); position: sticky; top: 0; z-index: 10; background-color: var(--bg-color); }
+        .header .menu-icon { font-size: 1.5rem; cursor: pointer; color: var(--primary-color); padding: 5px; }
+        .header .header-link { text-decoration: none; color: inherit; position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; }
+        .header .title { font-size: 1.25rem; font-weight: bold; display: flex; align-items: center; white-space: nowrap; }
+        .header .title img { width: 24px; height: 24px; margin-right: 8px; border-radius: 5px; }
+        .side-menu { height: 100%; width: 0; position: fixed; z-index: 1001; top: 0; left: 0; background-color: var(--card-color); overflow-x: hidden; transition: 0.3s; padding-top: 60px; box-shadow: 2px 0 10px rgba(0,0,0,0.5); }
+        .side-menu.open { width: var(--menu-width); }
+        .side-menu a { padding: 15px 20px; text-decoration: none; font-size: 1.1rem; color: var(--text-color); display: block; transition: 0.3s; border-bottom: 1px solid var(--input-bg-color); }
+        .side-menu a:hover { background-color: #575757; color: var(--primary-color); }
+        .side-menu .close-btn { position: absolute; top: 15px; right: 25px; font-size: 2rem; color: var(--primary-color); cursor: pointer; line-height: 1; border-bottom: none; }
+        #page-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; display: none; }
+        #page-overlay.show { display: block; }
         
-        /* --- SIDE MENU --- */
-        .side-menu {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            z-index: 1001;
-            top: 0;
-            left: 0;
-            background-color: var(--card-color);
-            overflow-x: hidden;
-            transition: 0.3s;
-            padding-top: 60px;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.5);
-        }
+        /* --- CONTEÚDO --- */
+        .selector-container { margin-bottom: 24px; }
+        .selector-container label { display: block; margin-bottom: 8px; color: var(--secondary-text-color); }
+        .selector-container select { width: 100%; padding: 12px; background-color: var(--input-bg-color); border: 1px solid var(--primary-color); border-radius: 8px; color: var(--text-color); font-size: 1rem; cursor: pointer; }
+        .selector-container select:focus { outline: none; }
 
-        .side-menu.open {
-            width: var(--menu-width);
-        }
+        #workout-options { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 24px; }
+        .workout-option-btn { background-color: var(--input-bg-color); color: var(--primary-color); border: 1px solid var(--primary-color); padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: bold; transition: background-color 0.3s; }
+        .workout-option-btn:hover { background-color: var(--primary-color); color: var(--bg-color); }
         
-        .side-menu a {
-            padding: 15px 20px;
-            text-decoration: none;
-            font-size: 1.1rem;
-            color: var(--text-color);
-            display: block;
-            transition: 0.3s;
-            border-bottom: 1px solid var(--input-bg-color);
-        }
-
-        .side-menu a:hover {
-            background-color: #575757;
-            color: var(--primary-color);
-        }
-
-        .side-menu .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 25px;
-            font-size: 2rem;
-            color: var(--primary-color);
-            cursor: pointer;
-            line-height: 1;
-            border-bottom: none;
-        }
-
-        #page-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            display: none;
-        }
-        #page-overlay.show {
-            display: block;
-        }
-
-        /* --- CONTENT --- */
-        .selector-container {
-            margin-bottom: 24px;
-        }
-        .selector-container label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--secondary-text-color);
-        }
-        .selector-container select {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--input-bg-color);
-            border: 1px solid var(--primary-color);
-            border-radius: 8px;
-            color: var(--text-color);
-            font-size: 1rem;
-            cursor: pointer;
-        }
-        .selector-container select:focus {
-            outline: none;
-        }
+        #workout-display { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+        .workout-day-card { background-color: var(--card-color); border-radius: var(--border-radius); padding: 16px; }
+        .workout-day-card h2 { color: var(--primary-color); margin-top: 0; border-bottom: 1px solid var(--input-bg-color); padding-bottom: 8px; }
+        .exercise-item { display: flex; align-items: center; margin-bottom: 12px; }
+        .exercise-item img { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; margin-right: 12px; background-color: #000; }
+        .exercise-details p { margin: 0; }
+        .exercise-details .exercise-name { font-weight: bold; font-size: 1rem; color: var(--text-color); }
+        .exercise-details .exercise-meta { font-size: 0.85rem; color: var(--secondary-text-color); }
+        .info-message, .error-message { text-align: center; color: var(--secondary-text-color); font-size: 1rem; padding: 20px; }
+        .footer { text-align: center; padding: 8px 16px; color: var(--secondary-text-color); font-size: 0.875rem; background-color: #282828; margin-top: auto; }
         
-        #workout-display {
-            display: grid;
-            gap: 16px;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        }
-        
-        .workout-day-card {
-            background-color: var(--card-color);
-            border-radius: var(--border-radius);
-            padding: 16px;
-        }
-        
-        .workout-day-card h2 {
-            color: var(--primary-color);
-            margin-top: 0;
-            border-bottom: 1px solid var(--input-bg-color);
-            padding-bottom: 8px;
-        }
-        
-        .exercise-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        
-        .exercise-item img {
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-right: 12px;
-            background-color: #000;
-        }
-        
-        .exercise-details p {
-            margin: 0;
-        }
-        .exercise-details .exercise-name {
-            font-weight: bold;
-            font-size: 1rem;
-            color: var(--text-color);
-        }
-        .exercise-details .exercise-meta {
-            font-size: 0.85rem;
-            color: var(--secondary-text-color);
-        }
-
-        .loading-message, .error-message {
-            text-align: center;
-            color: var(--secondary-text-color);
-            font-size: 1rem;
-            padding: 20px;
-        }
-
-        .footer {
-            text-align: center;
-            padding: 8px 16px;
-            color: var(--secondary-text-color);
-            font-size: 0.875rem;
-            background-color: #282828;
-            margin-top: auto;
-        }
-        
-        @media (max-width: 600px) {
-            .side-menu.open { width: min(var(--menu-width), 80vw); }
-        }
+        @media (max-width: 600px) { .side-menu.open { width: min(var(--menu-width), 80vw); } }
     </style>
 </head>
 <body>
@@ -259,64 +91,88 @@
 
         <div class="container">
             <div class="selector-container">
-                <label for="workout-select">Selecione seu objetivo:</label>
-                <select id="workout-select" onchange="loadWorkout(this.value)">
-                    <option value="">-- Escolha um treino --</option>
-                    <option value="perder-peso">Perder Peso</option>
-                    <option value="ganhar-massa">Ganhar Massa Muscular</option>
+                <label for="category-select">1. Selecione seu objetivo:</label>
+                <select id="category-select" onchange="showWorkoutOptions(this.value)">
+                    <option value="">-- Escolha um objetivo --</option>
+                    <option value="emagrecer">Emagrecer</option>
+                    <option value="hipertrofia">Hipertrofia</option>
                     <option value="iniciante">Iniciante</option>
                 </select>
             </div>
+            
+            <div id="workout-options-container" class="selector-container" style="display: none;">
+                <label>2. Escolha um treino:</label>
+                <div id="workout-options"></div>
+            </div>
 
             <div id="workout-display">
-                <p class="loading-message">Selecione um objetivo para ver o treino.</p>
+                <p class="info-message">Selecione um objetivo para ver as opções de treino.</p>
             </div>
         </div>
         
-        <footer class="footer">
-            Feito por quem treina, para quem treina. 💪❤️
-        </footer>
+        <footer class="footer">Feito por quem treina, para quem treina. 💪❤️</footer>
     </div>
 
     <script>
         // --- Side Menu Functions ---
-        function openNav() {
-            document.getElementById("side-menu").classList.add('open');
-            document.getElementById("page-overlay").classList.add('show');
-        }
-
-        function closeNav() {
-            document.getElementById("side-menu").classList.remove('open');
-            document.getElementById("page-overlay").classList.remove('show');
-        }
+        function openNav() { document.getElementById("side-menu").classList.add('open'); document.getElementById("page-overlay").classList.add('show'); }
+        function closeNav() { document.getElementById("side-menu").classList.remove('open'); document.getElementById("page-overlay").classList.remove('show'); }
         document.addEventListener('keydown', (event) => { if (event.key === "Escape") closeNav(); });
+        
+        // Mapeamento de categorias para arquivos de treino
+        const workoutCategories = {
+            emagrecer: ["emagrecer1", "emagrecer2"],
+            hipertrofia: ["hipertrofia1", "hipertrofia2", "hipertrofia3"],
+            iniciante: ["iniciante1"]
+        };
 
-        async function loadWorkout(workoutName) {
+        function showWorkoutOptions(category) {
+            const optionsContainer = document.getElementById('workout-options-container');
+            const optionsDiv = document.getElementById('workout-options');
             const display = document.getElementById('workout-display');
-            if (!workoutName) {
-                display.innerHTML = '<p class="loading-message">Selecione um objetivo para ver o treino.</p>';
+            
+            optionsDiv.innerHTML = ''; // Limpa botões antigos
+            display.innerHTML = '<p class="info-message">Escolha uma variação de treino acima.</p>';
+
+            if (!category) {
+                optionsContainer.style.display = 'none';
+                display.innerHTML = '<p class="info-message">Selecione um objetivo para ver as opções de treino.</p>';
                 return;
             }
 
-            display.innerHTML = '<p class="loading-message">Carregando treino...</p>';
+            const workouts = workoutCategories[category];
+            workouts.forEach((workoutFile, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'workout-option-btn';
+                btn.textContent = `Treino ${index + 1}`;
+                btn.onclick = () => fetchAndRenderWorkout(workoutFile);
+                optionsDiv.appendChild(btn);
+            });
+            
+            optionsContainer.style.display = 'block';
+        }
+
+        async function fetchAndRenderWorkout(workoutFile) {
+            const display = document.getElementById('workout-display');
+            display.innerHTML = '<p class="info-message">Carregando treino...</p>';
 
             try {
-                // Supondo que os arquivos JSON estejam em uma pasta 'treinos'
-                const response = await fetch(`./treinos/${workoutName}.json`);
+                // Caminho ajustado para a pasta "treinos"
+                const response = await fetch(`./treinos/${workoutFile}.json`);
                 if (!response.ok) {
-                    throw new Error(`Não foi possível encontrar o treino "${workoutName}". Status: ${response.status}`);
+                    throw new Error(`Não foi possível encontrar o treino "${workoutFile}". Status: ${response.status}`);
                 }
                 const workoutData = await response.json();
                 renderWorkout(workoutData);
             } catch (error) {
                 console.error("Erro ao carregar o treino:", error);
-                display.innerHTML = `<p class="error-message">Ops! Ocorreu um erro ao carregar o treino. Tente novamente mais tarde.</p>`;
+                display.innerHTML = `<p class="error-message">Ops! Ocorreu um erro ao carregar o treino. Verifique o console para mais detalhes.</p>`;
             }
         }
 
         function renderWorkout(data) {
             const display = document.getElementById('workout-display');
-            display.innerHTML = ''; // Limpa a área de exibição
+            display.innerHTML = '';
 
             for (const day in data.treinos) {
                 const dayCard = document.createElement('div');
@@ -329,30 +185,13 @@
                 data.treinos[day].exercicios.forEach(exercise => {
                     const exerciseItem = document.createElement('div');
                     exerciseItem.className = 'exercise-item';
-
-                    const exerciseImage = document.createElement('img');
-                    exerciseImage.src = exercise.gif_url;
-                    exerciseImage.alt = exercise.nome;
-                    // Fallback para imagem padrão em caso de erro
-                    exerciseImage.onerror = () => { exerciseImage.src = 'https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/icone_treino.jpg'; };
-                    
-                    const exerciseDetails = document.createElement('div');
-                    exerciseDetails.className = 'exercise-details';
-                    
-                    const exerciseName = document.createElement('p');
-                    exerciseName.className = 'exercise-name';
-                    exerciseName.textContent = exercise.nome;
-                    
-                    const exerciseMeta = document.createElement('p');
-                    exerciseMeta.className = 'exercise-meta';
-                    exerciseMeta.textContent = `Séries: ${exercise.series} | Repetições: ${exercise.repeticoes}`;
-                    
-                    exerciseDetails.appendChild(exerciseName);
-                    exerciseDetails.appendChild(exerciseMeta);
-                    
-                    exerciseItem.appendChild(exerciseImage);
-                    exerciseItem.appendChild(exerciseDetails);
-                    
+                    exerciseItem.innerHTML = `
+                        <img src="${exercise.gif_url}" alt="${exercise.nome}" onerror="this.src='https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/icone_treino.jpg';">
+                        <div class="exercise-details">
+                            <p class="exercise-name">${exercise.nome}</p>
+                            <p class="exercise-meta">Séries: ${exercise.series} | Repetições: ${exercise.repeticoes}</p>
+                        </div>
+                    `;
                     dayCard.appendChild(exerciseItem);
                 });
 
