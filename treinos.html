@@ -216,37 +216,48 @@
         }
 
         // ==========================================================
-        // CORREÇÃO APLICADA NESTA FUNÇÃO
+        // CORREÇÃO FINAL APLICADA NESTA FUNÇÃO
         // ==========================================================
         function renderWorkout(data) {
             const display = document.getElementById('workout-display');
             display.innerHTML = '';
 
-            // Alterado de "data.treinos" para "data" para checar o objeto JSON inteiro.
-            if(!data || Object.keys(data).length === 0){
-                display.innerHTML = `<p class="info-message">Este arquivo de treino parece estar vazio.</p>`;
+            // 1. Verifica se a propriedade "workouts" existe no JSON
+            if (!data.workouts || Object.keys(data.workouts).length === 0) {
+                display.innerHTML = `<p class="info-message">Este arquivo de treino parece estar vazio ou no formato incorreto.</p>`;
                 return;
             }
 
-            // Alterado de "data.treinos" para "data" para iterar sobre as chaves do objeto principal.
-            for (const day in data) {
+            // 2. Itera sobre as chaves do objeto "workouts" (ex: "treino-a", "treino-b")
+            for (const dayKey in data.workouts) {
                 const dayCard = document.createElement('div');
                 dayCard.className = 'workout-day-card';
                 
-                // Alterado de "data.treinos[day]" para "data[day]"
+                // 3. Pega o título e subtítulo do objeto "tabNames" usando a mesma chave
+                const titleInfo = data.tabNames[dayKey];
                 const dayTitle = document.createElement('h2');
-                dayTitle.textContent = `${data[day].nome} - ${data[day].foco}`;
+                // Combina o título (ex: "A") e o subtítulo (ex: "(Costas/Bíceps...)")
+                dayTitle.textContent = `${titleInfo.title} ${titleInfo.subtitle}`;
                 dayCard.appendChild(dayTitle);
                 
-                // Alterado de "data.treinos[day]" para "data[day]"
-                data[day].exercicios.forEach(exercise => {
+                // 4. Acessa o array de exercícios para o dia atual
+                const exercisesArray = data.workouts[dayKey];
+                
+                exercisesArray.forEach(exercise => {
                     const exerciseItem = document.createElement('div');
                     exerciseItem.className = 'exercise-item';
+
+                    // 5. Mapeia os nomes das propriedades do JSON para as esperadas pelo HTML
+                    const gif_url = exercise.image;
+                    const nome = exercise.name;
+                    const series = exercise.series;
+                    const repeticoes = exercise.reps;
+                    
                     exerciseItem.innerHTML = `
-                        <img src="${exercise.gif_url}" alt="${exercise.nome}" onerror="this.src='https.raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/icone_treino.jpg';">
+                        <img src="${gif_url}" alt="${nome}" onerror="this.src='https.raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/icone_treino.jpg';">
                         <div class="exercise-details">
-                            <p class="exercise-name">${exercise.nome}</p>
-                            <p class="exercise-meta">Séries: ${exercise.series} | Repetições: ${exercise.repeticoes}</p>
+                            <p class="exercise-name">${nome}</p>
+                            <p class="exercise-meta">Séries: ${series} | Repetições: ${repeticoes}</p>
                         </div>
                     `;
                     dayCard.appendChild(exerciseItem);
