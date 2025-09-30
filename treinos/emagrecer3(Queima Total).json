@@ -1,0 +1,216 @@
+{
+  "workouts": {
+    "treino-a": [
+      {
+        "name": "Pulley Frente",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/128.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "14",
+        "completed": false
+      },
+      {
+        "name": "Remada Unilateral Cross Over",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/135.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "12",
+        "completed": false
+      },
+      {
+        "name": "Rosca Direta com Halter",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/115.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "10",
+        "completed": false
+      },
+      {
+        "name": "Rosca Alternada",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/113.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "10",
+        "completed": false
+      },
+      {
+        "name": "Encolhimento com Halter",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/363.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "16",
+        "completed": false
+      },
+      {
+        "name": "Crucifixo Inverso",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/123.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "10",
+        "completed": false
+      },
+      {
+        "name": "Remada Curvada com Barra",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/132.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "24",
+        "completed": false
+      },
+      {
+        "name": "Rosca Martelo com Halter",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/121.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "12",
+        "completed": false
+      }
+    ],
+    "treino-b": [
+      {
+        "name": "Agachamento Livre",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/252.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "4",
+        "completed": false
+      },
+      {
+        "name": "Leg Press Inclinado",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/190.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "44",
+        "completed": false
+      },
+      {
+        "name": "Mesa Flexora",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/194.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "24",
+        "completed": false
+      },
+      {
+        "name": "Banco Extensor",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/212.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "24",
+        "completed": false
+      },
+      {
+        "name": "Banco Abdutor",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/210.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "19",
+        "completed": false
+      },
+      {
+        "name": "Banco Adutor",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/211.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "19",
+        "completed": false
+      },
+      {
+        "name": "Abdominal Supra no Aparelho [1]",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/108.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "4",
+        "completed": false
+      },
+      {
+        "name": "Abdominal Infra",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/102.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "4",
+        "completed": false
+      }
+    ],
+    "treino-c": [
+      {
+        "name": "Supino Reto com Barra",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/173.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "24",
+        "completed": false
+      },
+      {
+        "name": "Supino Inclinado com Halteres",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/172.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "19",
+        "completed": false
+      },
+      {
+        "name": "Crucifixo no Voador",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/167.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "12",
+        "completed": false
+      },
+      {
+        "name": "Elevação Lateral no Cross Over",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/156.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "12",
+        "completed": false
+      },
+      {
+        "name": "Elevação Frontal com Halteres",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/153.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "12",
+        "completed": false
+      },
+      {
+        "name": "Tríceps no Cross Over",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/217.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "14",
+        "completed": false
+      },
+      {
+        "name": "Tríceps Testa Cross Over",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/228.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "14",
+        "completed": false
+      },
+      {
+        "name": "Tríceps Banco",
+        "image": "https://sistemasca.blob.core.windows.net/arquivos/exercicios/216.gif",
+        "series": "5",
+        "reps": "15",
+        "weight": "4",
+        "completed": false
+      }
+    ]
+  },
+  "tabNames": {
+    "treino-a": {
+      "title": "A",
+      "subtitle": "(Queima Costas/Bíceps)"
+    },
+    "treino-b": {
+      "title": "B",
+      "subtitle": "(Queima Pernas/Abs)"
+    },
+    "treino-c": {
+      "title": "C",
+      "subtitle": "(Queima Peito/Tríceps)"
+    }
+  }
+}
