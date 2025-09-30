@@ -118,17 +118,13 @@
         document.addEventListener('keydown', (event) => { if (event.key === "Escape") closeNav(); });
         
         // --- LISTA DE TREINOS ---
-        // Para adicionar um novo treino, adicione uma nova entrada nesta lista.
-        // O "prefixo" deve corresponder ao início do nome do arquivo .json
         const listaDeTreinos = [
             {
                 "nome": "Emagrecer",
                 "prefixo": "emagrecer",
                 "treinos": [
-                    // CORREÇÃO APLICADA AQUI: removido "treinos/" do nome do arquivo.
                     { "arquivo": "emagrecer1.json", "titulo": "Emagrecimento - Foco Cardio" },
                     { "arquivo": "emagrecer2.json", "titulo": "Emagrecimento - Alta Intensidade" }
-                    // Adicione mais treinos de emagrecimento aqui
                 ]
             },
             {
@@ -138,7 +134,6 @@
                     { "arquivo": "hipertrofia1.json", "titulo": "Hipertrofia - Peito e Tríceps" },
                     { "arquivo": "hipertrofia2.json", "titulo": "Hipertrofia - Costas e Bíceps" },
                     { "arquivo": "hipertrofia3.json", "titulo": "Hipertrofia - Pernas Completas" }
-                    // Adicione mais treinos de hipertrofia aqui
                 ]
             },
             {
@@ -146,7 +141,6 @@
                 "prefixo": "iniciante",
                 "treinos": [
                     { "arquivo": "iniciante1.json", "titulo": "Iniciante - Adaptação Geral" }
-                    // Adicione mais treinos de iniciante aqui
                 ]
             }
         ];
@@ -211,7 +205,6 @@
             display.innerHTML = '<p class="info-message">Carregando treino...</p>';
 
             try {
-                // Esta função já adiciona o caminho da pasta "treinos/" antes do nome do arquivo.
                 const response = await fetch(`./treinos/${workoutFile}`);
                 if (!response.ok) throw new Error(`Arquivo não encontrado: ${workoutFile}`);
                 const workoutData = await response.json();
@@ -222,24 +215,31 @@
             }
         }
 
+        // ==========================================================
+        // CORREÇÃO APLICADA NESTA FUNÇÃO
+        // ==========================================================
         function renderWorkout(data) {
             const display = document.getElementById('workout-display');
             display.innerHTML = '';
 
-            if(!data.treinos || Object.keys(data.treinos).length === 0){
+            // Alterado de "data.treinos" para "data" para checar o objeto JSON inteiro.
+            if(!data || Object.keys(data).length === 0){
                 display.innerHTML = `<p class="info-message">Este arquivo de treino parece estar vazio.</p>`;
                 return;
             }
 
-            for (const day in data.treinos) {
+            // Alterado de "data.treinos" para "data" para iterar sobre as chaves do objeto principal.
+            for (const day in data) {
                 const dayCard = document.createElement('div');
                 dayCard.className = 'workout-day-card';
                 
+                // Alterado de "data.treinos[day]" para "data[day]"
                 const dayTitle = document.createElement('h2');
-                dayTitle.textContent = `${data.treinos[day].nome} - ${data.treinos[day].foco}`;
+                dayTitle.textContent = `${data[day].nome} - ${data[day].foco}`;
                 dayCard.appendChild(dayTitle);
                 
-                data.treinos[day].exercicios.forEach(exercise => {
+                // Alterado de "data.treinos[day]" para "data[day]"
+                data[day].exercicios.forEach(exercise => {
                     const exerciseItem = document.createElement('div');
                     exerciseItem.className = 'exercise-item';
                     exerciseItem.innerHTML = `
