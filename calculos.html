@@ -18,201 +18,74 @@
             --menu-width: 250px;
         }
 
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
+        *, *::before, *::after { box-sizing: border-box; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            margin: 0; padding: 0; min-height: 100vh;
+            display: flex; flex-direction: column;
         }
 
-        .container {
-            padding: 16px;
-            max-width: 1200px;
-            margin: 0 auto;
-            flex-grow: 1;
-        }
+        .container { padding: 16px; max-width: 1200px; margin: 0 auto; flex-grow: 1; }
 
-        /* --- HEADER --- */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--input-bg-color);
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background-color: var(--bg-color);
-        }
+        /* --- HEADER E MENU LATERAL (sem alterações) --- */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--input-bg-color); position: sticky; top: 0; z-index: 10; background-color: var(--bg-color); }
+        .header .menu-icon { font-size: 1.5rem; cursor: pointer; color: var(--primary-color); padding: 5px; }
+        .header .header-link { text-decoration: none; color: inherit; position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; }
+        .header .title { font-size: 1.25rem; font-weight: bold; display: flex; align-items: center; white-space: nowrap; }
+        .header .title img { width: 24px; height: 24px; margin-right: 8px; border-radius: 5px; }
+        .side-menu { height: 100%; width: 0; position: fixed; z-index: 1001; top: 0; left: 0; background-color: var(--card-color); overflow-x: hidden; transition: 0.3s; padding-top: 60px; box-shadow: 2px 0 10px rgba(0,0,0,0.5); }
+        .side-menu.open { width: var(--menu-width); }
+        .side-menu a { padding: 15px 20px; text-decoration: none; font-size: 1.1rem; color: var(--text-color); display: block; transition: 0.3s; border-bottom: 1px solid var(--input-bg-color); }
+        .side-menu a:hover { background-color: #575757; color: var(--primary-color); }
+        .side-menu .close-btn { position: absolute; top: 15px; right: 25px; font-size: 2rem; color: var(--primary-color); cursor: pointer; line-height: 1; border-bottom: none; }
+        #page-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; display: none; }
+        #page-overlay.show { display: block; }
 
-        .header .menu-icon {
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--primary-color);
-            padding: 5px;
-        }
+        /* --- CONTEÚDO --- */
+        .calculator-card { background-color: var(--card-color); border-radius: var(--border-radius); padding: 24px; margin-bottom: 24px; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--secondary-text-color); }
+        .form-group input, .form-group select { width: 100%; padding: 10px; background-color: var(--input-bg-color); border: none; border-radius: 8px; color: var(--text-color); font-size: 1rem; }
+        .form-group input:focus, .form-group select:focus { outline: none; border: 1px solid var(--primary-color); }
+        .results-container { margin-top: 24px; padding: 16px; background-color: var(--bg-color); border-radius: var(--border-radius); }
+        .result-item { margin-bottom: 24px; }
+        .result-item h3 { color: var(--primary-color); margin: 0 0 8px 0; }
+        .result-item p { margin: 0; font-size: 1.2rem; }
+        .result-item span { font-size: 0.9rem; color: var(--secondary-text-color); }
 
-        .header .header-link {
-            text-decoration: none;
-            color: inherit;
+        /* --- BARRA DE IMC --- */
+        #imc-visualizer { display: none; margin-top: 10px; }
+        .imc-bar-container { position: relative; width: 100%; margin-bottom: 10px; }
+        .imc-bar { display: flex; height: 15px; border-radius: 8px; overflow: hidden; }
+        .imc-bar-segment { height: 100%; }
+        .imc-bar-segment.underweight { background-color: #3498db; width: 14%; } /* Até 18.5 */
+        .imc-bar-segment.normal { background-color: #2ecc71; width: 26%; } /* 18.5 a 24.9 */
+        .imc-bar-segment.overweight { background-color: #f1c40f; width: 20%; } /* 25 a 29.9 */
+        .imc-bar-segment.obese1 { background-color: #e67e22; width: 20%; } /* 30 a 34.9 */
+        .imc-bar-segment.obese2 { background-color: #c0392b; width: 20%; } /* 35+ */
+        
+        .imc-indicator {
             position: absolute;
-            left: 50%;
+            bottom: 10px;
             transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            width: 20px;
+            height: 20px;
+            background-color: var(--text-color);
+            border: 2px solid var(--bg-color);
+            border-radius: 50%;
+            transition: left 0.5s ease-out;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
-        .header .title {
-            font-size: 1.25rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            white-space: nowrap;
-        }
+        .imc-legend { display: flex; justify-content: space-around; font-size: 0.7rem; color: var(--secondary-text-color); flex-wrap: wrap; gap: 5px; }
+        .imc-legend span { display: flex; align-items: center; }
+        .imc-legend .legend-color { width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; }
 
-        .header .title img {
-            width: 24px;
-            height: 24px;
-            margin-right: 8px;
-            border-radius: 5px;
-        }
-
-        /* --- SIDE MENU --- */
-        .side-menu {
-            height: 100%;
-            width: 0;
-            position: fixed;
-            z-index: 1001;
-            top: 0;
-            left: 0;
-            background-color: var(--card-color);
-            overflow-x: hidden;
-            transition: 0.3s;
-            padding-top: 60px;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.5);
-        }
-
-        .side-menu.open {
-            width: var(--menu-width);
-        }
-
-        .side-menu a {
-            padding: 15px 20px;
-            text-decoration: none;
-            font-size: 1.1rem;
-            color: var(--text-color);
-            display: block;
-            transition: 0.3s;
-            border-bottom: 1px solid var(--input-bg-color);
-        }
-        
-        .side-menu a:hover {
-            background-color: #575757;
-            color: var(--primary-color);
-        }
-
-        .side-menu .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 25px;
-            font-size: 2rem;
-            color: var(--primary-color);
-            cursor: pointer;
-            line-height: 1;
-            border-bottom: none;
-        }
-        
-        #page-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 1000;
-            display: none;
-        }
-        #page-overlay.show {
-            display: block;
-        }
-
-        /* --- CONTENT --- */
-        .calculator-card {
-            background-color: var(--card-color);
-            border-radius: var(--border-radius);
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--secondary-text-color);
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            background-color: var(--input-bg-color);
-            border: none;
-            border-radius: 8px;
-            color: var(--text-color);
-            font-size: 1rem;
-        }
-        
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border: 1px solid var(--primary-color);
-        }
-
-        .results-container {
-            margin-top: 24px;
-            padding: 16px;
-            background-color: var(--bg-color);
-            border-radius: var(--border-radius);
-        }
-
-        .result-item {
-            margin-bottom: 16px;
-        }
-        .result-item h3 {
-            color: var(--primary-color);
-            margin: 0 0 8px 0;
-        }
-        .result-item p {
-            margin: 0;
-            font-size: 1.2rem;
-        }
-        .result-item span {
-            font-size: 0.9rem;
-            color: var(--secondary-text-color);
-        }
-
-        .footer {
-            text-align: center;
-            padding: 8px 16px;
-            color: var(--secondary-text-color);
-            font-size: 0.875rem;
-            background-color: #282828;
-            margin-top: auto;
-        }
-        
-        @media (max-width: 600px) {
-            .side-menu.open { width: min(var(--menu-width), 80vw); }
-        }
+        .footer { text-align: center; padding: 8px 16px; color: var(--secondary-text-color); font-size: 0.875rem; background-color: #282828; margin-top: auto; }
+        @media (max-width: 600px) { .side-menu.open { width: min(var(--menu-width), 80vw); } }
     </style>
 </head>
 <body>
@@ -229,59 +102,30 @@
         <div class="header">
             <span class="menu-icon" onclick="openNav()">&#9776;</span>
             <a href="index.html" class="header-link">
-                <span class="title">
-                    <img src="https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/icone_treino.jpg" alt="Ícone de Treino">
-                    Cálculos de Saúde
-                </span>
+                <span class="title"><img src="https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/icone_treino.jpg" alt="Ícone">Cálculos de Saúde</span>
             </a>
         </div>
 
         <div class="container">
             <div class="calculator-card">
-                <div class="form-group">
-                    <label for="weight">Peso (kg)</label>
-                    <input type="number" id="weight" placeholder="Ex: 75.5" oninput="calculateAll()">
-                </div>
-                <div class="form-group">
-                    <label for="height">Altura (cm)</label>
-                    <input type="number" id="height" placeholder="Ex: 178" oninput="calculateAll()">
-                </div>
-                <div class="form-group">
-                    <label for="age">Idade</label>
-                    <input type="number" id="age" placeholder="Ex: 30" oninput="calculateAll()">
-                </div>
-                <div class="form-group">
-                    <label for="gender">Gênero</label>
-                    <select id="gender" onchange="calculateAll()">
-                        <option value="male">Masculino</option>
-                        <option value="female">Feminino</option>
-                    </select>
-                </div>
+                <div class="form-group"><label for="weight">Peso (kg)</label><input type="number" id="weight" placeholder="Ex: 75.5" oninput="calculateAll()"></div>
+                <div class="form-group"><label for="height">Altura (cm)</label><input type="number" id="height" placeholder="Ex: 178" oninput="calculateAll()"></div>
+                <div class="form-group"><label for="age">Idade</label><input type="number" id="age" placeholder="Ex: 30" oninput="calculateAll()"></div>
+                <div class="form-group"><label for="gender">Gênero</label><select id="gender" onchange="calculateAll()"><option value="male">Masculino</option><option value="female">Feminino</option></select></div>
             </div>
 
             <div class="results-container" id="results">
-                 <div class="result-item">
-                    <h3>Preencha os campos acima para ver os resultados.</h3>
-                </div>
+                <div class="result-item"><h3>Preencha os campos acima para ver os resultados.</h3></div>
             </div>
         </div>
         
-        <footer class="footer">
-            Feito por quem treina, para quem treina. 💪❤️
-        </footer>
+        <footer class="footer">Feito por quem treina, para quem treina. 💪❤️</footer>
     </div>
 
     <script>
         // --- Side Menu Functions ---
-        function openNav() {
-            document.getElementById("side-menu").classList.add('open');
-            document.getElementById("page-overlay").classList.add('show');
-        }
-
-        function closeNav() {
-            document.getElementById("side-menu").classList.remove('open');
-            document.getElementById("page-overlay").classList.remove('show');
-        }
+        function openNav() { document.getElementById("side-menu").classList.add('open'); document.getElementById("page-overlay").classList.add('show'); }
+        function closeNav() { document.getElementById("side-menu").classList.remove('open'); document.getElementById("page-overlay").classList.remove('show'); }
         document.addEventListener('keydown', (event) => { if (event.key === "Escape") closeNav(); });
 
         function calculateAll() {
@@ -291,45 +135,87 @@
             const gender = document.getElementById('gender').value;
             const resultsDiv = document.getElementById('results');
 
-            if (!weight || !height || !age) {
-                resultsDiv.innerHTML = '<div class="result-item"><h3>Preencha todos os campos para ver os resultados.</h3></div>';
+            if (!weight || !height || !age || weight <= 0 || height <= 0 || age <= 0) {
+                resultsDiv.innerHTML = '<div class="result-item"><h3>Preencha todos os campos com valores válidos.</h3></div>';
                 return;
             }
 
-            // Cálculo do IMC
+            // --- Cálculos ---
             const heightInMeters = height / 100;
             const imc = weight / (heightInMeters * heightInMeters);
             const imcCategory = getImcCategory(imc);
             
-            // Cálculo da TMB (Taxa Metabólica Basal) - Fórmula de Harris-Benedict
             let tmb;
             if (gender === 'male') {
                 tmb = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
-            } else { // female
+            } else {
                 tmb = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
             }
 
+            // --- Renderização dos Resultados ---
             resultsDiv.innerHTML = `
                 <div class="result-item">
                     <h3>Índice de Massa Corporal (IMC)</h3>
                     <p>${imc.toFixed(2)}</p>
-                    <span>Classificação: <strong>${imcCategory}</strong></span>
+                    <span id="imc-category-text">Classificação: <strong>${imcCategory}</strong></span>
+                    
+                    <div id="imc-visualizer">
+                        <div class="imc-bar-container">
+                             <div class="imc-indicator" id="imc-indicator"></div>
+                             <div class="imc-bar">
+                                <div class="imc-bar-segment underweight"></div>
+                                <div class="imc-bar-segment normal"></div>
+                                <div class="imc-bar-segment overweight"></div>
+                                <div class="imc-bar-segment obese1"></div>
+                                <div class="imc-bar-segment obese2"></div>
+                             </div>
+                        </div>
+                        <div class="imc-legend">
+                            <span><div class="legend-color" style="background: #3498db;"></div>Abaixo</span>
+                            <span><div class="legend-color" style="background: #2ecc71;"></div>Normal</span>
+                            <span><div class="legend-color" style="background: #f1c40f;"></div>Sobrepeso</span>
+                            <span><div class="legend-color" style="background: #e67e22;"></div>Obes. I</span>
+                            <span><div class="legend-color" style="background: #c0392b;"></div>Obes. II+</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="result-item">
                     <h3>Taxa Metabólica Basal (TMB)</h3>
                     <p>${tmb.toFixed(0)} kcal</p>
-                    <span>Calorias mínimas para manter as funções vitais em repouso.</span>
+                    <span>Gasto calórico diário em repouso.</span>
                 </div>
             `;
+            
+            // Atualiza a posição do indicador do IMC
+            updateImcIndicator(imc);
         }
 
         function getImcCategory(imc) {
             if (imc < 18.5) return "Abaixo do peso";
-            if (imc < 24.9) return "Peso normal";
-            if (imc < 29.9) return "Sobrepeso";
-            if (imc < 34.9) return "Obesidade Grau I";
-            if (imc < 39.9) return "Obesidade Grau II";
+            if (imc < 25) return "Peso normal";
+            if (imc < 30) return "Sobrepeso";
+            if (imc < 35) return "Obesidade Grau I";
+            if (imc < 40) return "Obesidade Grau II";
             return "Obesidade Grau III";
+        }
+
+        function updateImcIndicator(imc) {
+            const visualizer = document.getElementById('imc-visualizer');
+            const indicator = document.getElementById('imc-indicator');
+            if (!visualizer || !indicator) return;
+
+            // Define os limites da barra para um visual mais agradável
+            const minBmi = 15;
+            const maxBmi = 40;
+            
+            // Calcula a posição percentual
+            let positionPercent = ((imc - minBmi) / (maxBmi - minBmi)) * 100;
+            
+            // Garante que o indicador não saia da barra
+            positionPercent = Math.max(0, Math.min(100, positionPercent));
+
+            indicator.style.left = `${positionPercent}%`;
+            visualizer.style.display = 'block';
         }
     </script>
 
