@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cálculos de Saúde - Meu Treino</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/favicon.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #212121;
+            --card-color: #2c2c2c;
+            --text-color: #f0f0f0;
+            --secondary-text-color: #a0a0a0;
+            --primary-color: #ffc107;
+            --border-radius: 12px;
+            --input-bg-color: #383838;
+            --menu-width: 250px;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container {
+            padding: 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex-grow: 1;
+        }
+
+        /* --- HEADER --- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--input-bg-color);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background-color: var(--bg-color);
+        }
+
+        .header .menu-icon {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--primary-color);
+            padding: 5px;
+        }
+
+        .header .header-link {
+            text-decoration: none;
+            color: inherit;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header .title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+        }
+
+        .header .title img {
+            width: 24px;
+            height: 24px;
+            margin-right: 8px;
+            border-radius: 5px;
+        }
+
+        /* --- SIDE MENU --- */
+        .side-menu {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1001;
+            top: 0;
+            left: 0;
+            background-color: var(--card-color);
+            overflow-x: hidden;
+            transition: 0.3s;
+            padding-top: 60px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+        }
+
+        .side-menu.open {
+            width: var(--menu-width);
+        }
+
+        .side-menu a {
+            padding: 15px 20px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            color: var(--text-color);
+            display: block;
+            transition: 0.3s;
+            border-bottom: 1px solid var(--input-bg-color);
+        }
+        
+        .side-menu a:hover {
+            background-color: #575757;
+            color: var(--primary-color);
+        }
+
+        .side-menu .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 2rem;
+            color: var(--primary-color);
+            cursor: pointer;
+            line-height: 1;
+            border-bottom: none;
+        }
+        
+        #page-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            display: none;
+        }
+        #page-overlay.show {
+            display: block;
+        }
+
+        /* --- CONTENT --- */
+        .calculator-card {
+            background-color: var(--card-color);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--secondary-text-color);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--input-bg-color);
+            border: none;
+            border-radius: 8px;
+            color: var(--text-color);
+            font-size: 1rem;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border: 1px solid var(--primary-color);
+        }
+
+        .results-container {
+            margin-top: 24px;
+            padding: 16px;
+            background-color: var(--bg-color);
+            border-radius: var(--border-radius);
+        }
+
+        .result-item {
+            margin-bottom: 16px;
+        }
+        .result-item h3 {
+            color: var(--primary-color);
+            margin: 0 0 8px 0;
+        }
+        .result-item p {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+        .result-item span {
+            font-size: 0.9rem;
+            color: var(--secondary-text-color);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 8px 16px;
+            color: var(--secondary-text-color);
+            font-size: 0.875rem;
+            background-color: #282828;
+            margin-top: auto;
+        }
+        
+        @media (max-width: 600px) {
+            .side-menu.open { width: min(var(--menu-width), 80vw); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="side-menu" class="side-menu">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeNav()">&times;</a>
+        <a href="index.html">Meu Treino</a>
+        <a href="treinos.html">Treinos Prontos</a>
+        <a href="calculos.html">Cálculos de Saúde</a>
+    </div>
+    <div id="page-overlay" onclick="closeNav()"></div>
+    
+    <div id="main-content-wrapper">
+        <div class="header">
+            <span class="menu-icon" onclick="openNav()">&#9776;</span>
+            <a href="index.html" class="header-link">
+                <span class="title">
+                    <img src="https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/icone_treino.jpg" alt="Ícone de Treino">
+                    Cálculos de Saúde
+                </span>
+            </a>
+        </div>
+
+        <div class="container">
+            <div class="calculator-card">
+                <div class="form-group">
+                    <label for="weight">Peso (kg)</label>
+                    <input type="number" id="weight" placeholder="Ex: 75.5" oninput="calculateAll()">
+                </div>
+                <div class="form-group">
+                    <label for="height">Altura (cm)</label>
+                    <input type="number" id="height" placeholder="Ex: 178" oninput="calculateAll()">
+                </div>
+                <div class="form-group">
+                    <label for="age">Idade</label>
+                    <input type="number" id="age" placeholder="Ex: 30" oninput="calculateAll()">
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gênero</label>
+                    <select id="gender" onchange="calculateAll()">
+                        <option value="male">Masculino</option>
+                        <option value="female">Feminino</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="results-container" id="results">
+                 <div class="result-item">
+                    <h3>Preencha os campos acima para ver os resultados.</h3>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="footer">
+            Feito por quem treina, para quem treina. 💪❤️
+        </footer>
+    </div>
+
+    <script>
+        // --- Side Menu Functions ---
+        function openNav() {
+            document.getElementById("side-menu").classList.add('open');
+            document.getElementById("page-overlay").classList.add('show');
+        }
+
+        function closeNav() {
+            document.getElementById("side-menu").classList.remove('open');
+            document.getElementById("page-overlay").classList.remove('show');
+        }
+        document.addEventListener('keydown', (event) => { if (event.key === "Escape") closeNav(); });
+
+        function calculateAll() {
+            const weight = parseFloat(document.getElementById('weight').value);
+            const height = parseFloat(document.getElementById('height').value);
+            const age = parseInt(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+            const resultsDiv = document.getElementById('results');
+
+            if (!weight || !height || !age) {
+                resultsDiv.innerHTML = '<div class="result-item"><h3>Preencha todos os campos para ver os resultados.</h3></div>';
+                return;
+            }
+
+            // Cálculo do IMC
+            const heightInMeters = height / 100;
+            const imc = weight / (heightInMeters * heightInMeters);
+            const imcCategory = getImcCategory(imc);
+            
+            // Cálculo da TMB (Taxa Metabólica Basal) - Fórmula de Harris-Benedict
+            let tmb;
+            if (gender === 'male') {
+                tmb = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+            } else { // female
+                tmb = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
+            }
+
+            resultsDiv.innerHTML = `
+                <div class="result-item">
+                    <h3>Índice de Massa Corporal (IMC)</h3>
+                    <p>${imc.toFixed(2)}</p>
+                    <span>Classificação: <strong>${imcCategory}</strong></span>
+                </div>
+                <div class="result-item">
+                    <h3>Taxa Metabólica Basal (TMB)</h3>
+                    <p>${tmb.toFixed(0)} kcal</p>
+                    <span>Calorias mínimas para manter as funções vitais em repouso.</span>
+                </div>
+            `;
+        }
+
+        function getImcCategory(imc) {
+            if (imc < 18.5) return "Abaixo do peso";
+            if (imc < 24.9) return "Peso normal";
+            if (imc < 29.9) return "Sobrepeso";
+            if (imc < 34.9) return "Obesidade Grau I";
+            if (imc < 39.9) return "Obesidade Grau II";
+            return "Obesidade Grau III";
+        }
+    </script>
+
+</body>
+</html>
