@@ -202,15 +202,15 @@
   "tabNames": {
     "treino-a": {
       "title": "A",
-      "subtitle": "(Queima Costas/Bíceps)"
+      "subtitle": "(Costas/Bíceps)"
     },
     "treino-b": {
       "title": "B",
-      "subtitle": "(Queima Pernas/Abs)"
+      "subtitle": "(Pernas/Abs)"
     },
     "treino-c": {
       "title": "C",
-      "subtitle": "(Queima Peito/Tríceps)"
+      "subtitle": "(Peito/Tríceps)"
     }
   }
 }
