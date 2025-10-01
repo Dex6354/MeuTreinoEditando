@@ -202,15 +202,15 @@
   "tabNames": {
     "treino-a": {
       "title": "A",
-      "subtitle": "(Intenso Costas/Bíceps)"
+      "subtitle": "(Costas/Bíceps)"
     },
     "treino-b": {
       "title": "B",
-      "subtitle": "(Intenso Pernas/Abs)"
+      "subtitle": "(Pernas/Abs)"
     },
     "treino-c": {
       "title": "C",
-      "subtitle": "(Intenso Peito/Tríceps)"
+      "subtitle": "(Peito/Tríceps)"
     }
   }
 }
