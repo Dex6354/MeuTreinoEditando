@@ -44,7 +44,7 @@
         .header .header-link { text-decoration: none; color: inherit; position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; }
         .header .title { font-size: 1.25rem; font-weight: bold; display: flex; align-items: center; white-space: nowrap; }
         .header .title img { width: 24px; height: 24px; margin-right: 8px; border-radius: 5px; }
-                .side-menu { height: 100%; width: 0; position: fixed; z-index: 1001; top: 0; left: 0; background-color: var(--card-color); overflow-x: hidden; transition: 0.3s; padding-top: 60px; box-shadow: 2px 0 5px rgba(0,0,0,0.5); display: flex; flex-direction: column; }
+        .side-menu { height: 100%; width: 0; position: fixed; z-index: 1001; top: 0; left: 0; background-color: var(--card-color); overflow-x: hidden; transition: 0.3s; padding-top: 60px; box-shadow: 2px 0 5px rgba(0,0,0,0.5); display: flex; flex-direction: column; }
         .side-menu.open { width: var(--menu-width); }
         .side-menu .close-btn { position: absolute; top: 15px; right: 25px; font-size: 2rem; color: var(--primary-color); cursor: pointer; }
         .side-menu a { padding: 15px 20px; text-decoration: none; font-size: 1.1rem; color: var(--text-color); display: block; transition: 0.3s; border-bottom: 1px solid var(--input-bg-color); }
@@ -98,6 +98,17 @@
         .imc-legend span { display: flex; align-items: center; }
         .imc-legend .legend-color { width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; }
 
+        .professional-advice {
+            padding: 16px;
+            margin: 24px 0;
+            background-color: var(--card-color);
+            color: var(--secondary-text-color);
+            border-radius: var(--border-radius);
+            border-left: 5px solid var(--primary-color);
+            text-align: center;
+        }
+        .professional-advice p { margin: 0; }
+
         .footer { text-align: center; padding: 8px 16px; color: var(--secondary-text-color); font-size: 0.875rem; background-color: #282828; margin-top: auto; }
         @media (max-width: 600px) { .side-menu.open { width: min(var(--menu-width), 80vw); } }
     </style>
@@ -139,6 +150,10 @@
 
             <div class="results-container" id="results">
                 <div class="result-item"><h3>Preencha os campos acima para ver os resultados.</h3></div>
+            </div>
+
+            <div class="professional-advice">
+                <p><strong>Atenção:</strong> Os resultados desta calculadora são apenas estimativas e não substituem uma avaliação profissional. Consulte um médico ou nutricionista para orientações personalizadas.</p>
             </div>
         </div>
         
