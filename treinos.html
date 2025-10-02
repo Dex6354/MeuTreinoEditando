@@ -390,13 +390,6 @@
 
             if (!currentWorkoutData) return;
 
-            // Botão de Download
-            const downloadButton = document.createElement('button');
-            downloadButton.className = 'action-btn';
-            downloadButton.innerHTML = `<i class="fas fa-file-download"></i> Baixar Treino`;
-            downloadButton.onclick = downloadCurrentWorkout;
-            actionsContainer.appendChild(downloadButton);
-
             // Botão de Salvar
             const saveButton = document.createElement('button');
             saveButton.id = 'save-btn'
@@ -404,6 +397,13 @@
             saveButton.innerHTML = `<i class="fas fa-save"></i> Salvar Treino`;
             saveButton.onclick = saveToMyWorkouts;
             actionsContainer.appendChild(saveButton);
+            
+            // Botão de Download
+            const downloadButton = document.createElement('button');
+            downloadButton.className = 'action-btn';
+            downloadButton.innerHTML = `<i class="fas fa-file-download"></i> Baixar Treino`;
+            downloadButton.onclick = downloadCurrentWorkout;
+            actionsContainer.appendChild(downloadButton);
         }
 
         function downloadCurrentWorkout() {
