@@ -121,6 +121,17 @@
         .footer { text-align: center; padding: 8px 16px; color: var(--secondary-text-color); font-size: 0.875rem; background-color: #282828; margin-top: auto; }
         .workout-content { display: none; }
         .workout-content.active { display: block; }
+
+        .professional-advice {
+            padding: 16px;
+            margin: 24px 0;
+            background-color: var(--card-color);
+            color: var(--secondary-text-color);
+            border-radius: var(--border-radius);
+            border-left: 5px solid var(--primary-color);
+            text-align: center;
+        }
+        .professional-advice p { margin: 0; }
         
         @media (max-width: 600px) { .side-menu.open { width: min(var(--menu-width), 80vw); } }
     </style>
@@ -178,6 +189,10 @@
 
             <div id="workout-display">
                 <p class="info-message">Selecione um objetivo e um treino para começar.</p>
+            </div>
+
+            <div class="professional-advice">
+                <p><strong>Atenção:</strong> Antes de iniciar qualquer programa de treino, consulte um profissional de educação física ou um médico para garantir que os exercícios são adequados para você.</p>
             </div>
         </div>
         
