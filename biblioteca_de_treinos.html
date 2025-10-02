@@ -417,6 +417,13 @@
             downloadButton.innerHTML = `<i class="fas fa-file-download"></i> Baixar Treino`;
             downloadButton.onclick = downloadCurrentWorkout;
             actionsContainer.appendChild(downloadButton);
+
+            // Botão de Compartilhar
+            const shareButton = document.createElement('button');
+            shareButton.className = 'action-btn';
+            shareButton.innerHTML = `<i class="fas fa-share-alt"></i> Compartilhar`;
+            shareButton.onclick = shareCurrentWorkout;
+            actionsContainer.appendChild(shareButton);
         }
 
         function downloadCurrentWorkout() {
@@ -442,6 +449,48 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+        }
+
+        async function shareCurrentWorkout() {
+            const workoutSelect = document.getElementById('workout-select');
+            const selectedWorkoutFile = workoutSelect.value;
+
+            if (!selectedWorkoutFile) {
+                alert("Nenhum treino selecionado para compartilhar.");
+                return;
+            }
+
+            // Constrói a URL base, assumindo que index.html está na mesma pasta.
+            // O href '.' aponta para o arquivo index do diretório.
+            const baseUrl = new URL('.', window.location.href).href;
+            const shareUrl = `${baseUrl}?import-workout=${encodeURIComponent(selectedWorkoutFile)}`;
+
+            const shareData = {
+                title: 'Meu Treino',
+                text: 'Confira este treino que encontrei no app Meu Treino!',
+                url: shareUrl
+            };
+
+            try {
+                // Usa a API de Compartilhamento nativa se disponível
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                } else {
+                    // Fallback para copiar o link para a área de transferência
+                    await navigator.clipboard.writeText(shareUrl);
+                    alert('Link de compartilhamento copiado para a área de transferência!');
+                }
+            } catch (err) {
+                console.error('Erro ao compartilhar:', err);
+                // Um fallback extra caso o usuário cancele ou a API falhe
+                alert('Não foi possível usar o compartilhamento nativo. O link foi copiado para a área de transferência para que você possa colar e enviar.');
+                 try {
+                    await navigator.clipboard.writeText(shareUrl);
+                } catch (clipErr) {
+                    console.error('Erro ao copiar para a área de transferência:', clipErr);
+                    alert('Não foi possível copiar o link.');
+                }
+            }
         }
 
         function saveToMyWorkouts() {
