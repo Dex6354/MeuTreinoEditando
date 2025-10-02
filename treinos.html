@@ -45,7 +45,7 @@
             border-bottom: none;
         }
         .side-menu .sponsorship-box { margin-top: auto; padding: 20px; text-align: center; width: 100%; }
-        .side-menu .sponsorship-box img { max-width: 100%; border-radius: var(--border-radius); width: 100%; } /* Adicionado */
+        .side-menu .sponsorship-box img { max-width: 100%; border-radius: var(--border-radius); width: 100%; }
         #page-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; display: none; }
         #page-overlay.show { display: block; }
         
@@ -56,8 +56,8 @@
         .selector-container select:disabled { cursor: not-allowed; opacity: 0.5; }
         .selector-container select:focus { outline: none; }
 
-        #download-container { margin-bottom: 24px; }
-        #download-btn {
+        #actions-container { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 24px; }
+        .action-btn {
             background-color: var(--primary-color);
             color: #1a1a1a;
             border: none;
@@ -67,9 +67,42 @@
             font-weight: bold;
             font-size: 1rem;
             transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        #download-btn:hover { background-color: #ffda6b; }
+        .action-btn:hover { background-color: #ffda6b; }
+        .action-btn#save-btn { background-color: #4CAF50; color: white; }
+        .action-btn#save-btn:hover { background-color: #5cb85c; }
         
+        /* --- ESTILOS DAS ABAS (TABS) --- */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--input-bg-color);
+            margin-bottom: 16px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tabs .tab-link {
+            background: none; border: none;
+            color: var(--secondary-text-color);
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            white-space: nowrap;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+        .tabs .tab-link.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+        .tabs .tab-link .tab-title { font-size: 1rem; }
+        .tabs .tab-link .tab-subtitle { font-size: 0.8rem; display: block; }
+
         #workout-display { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
         .workout-day-card { background-color: var(--card-color); border-radius: var(--border-radius); padding: 16px; }
         .workout-day-card h2 { color: var(--primary-color); margin-top: 0; border-bottom: 1px solid var(--input-bg-color); padding-bottom: 8px; }
@@ -80,6 +113,8 @@
         .exercise-details .exercise-meta { font-size: 0.85rem; color: var(--secondary-text-color); }
         .info-message, .error-message { text-align: center; color: var(--secondary-text-color); font-size: 1rem; padding: 20px; }
         .footer { text-align: center; padding: 8px 16px; color: var(--secondary-text-color); font-size: 0.875rem; background-color: #282828; margin-top: auto; }
+        .workout-content { display: none; }
+        .workout-content.active { display: block; }
         
         @media (max-width: 600px) { .side-menu.open { width: min(var(--menu-width), 80vw); } }
     </style>
@@ -130,7 +165,9 @@
                 </div>
             </div>
 
-            <div id="download-container"></div>
+            <div id="actions-container"></div>
+            
+            <div id="tabs-container" class="tabs"></div>
 
             <div id="workout-display">
                 <p class="info-message">Selecione um objetivo e um treino para começar.</p>
@@ -186,10 +223,7 @@
             }
         ];
 
-        // NOVO: Variáveis para guardar os dados do treino atual
         let currentWorkoutData = null;
-        let currentWorkoutFilename = null;
-
 
         document.addEventListener('DOMContentLoaded', () => {
             const categorySelect = document.getElementById('category-select');
@@ -221,11 +255,14 @@
         function populateWorkoutSelect(selectedCategoryPrefix) {
             const workoutSelect = document.getElementById('workout-select');
             const display = document.getElementById('workout-display');
-            const downloadContainer = document.getElementById('download-container');
+            const actionsContainer = document.getElementById('actions-container');
+            const tabsContainer = document.getElementById('tabs-container');
 
             workoutSelect.innerHTML = '<option value="">-- Escolha um treino --</option>';
             display.innerHTML = '<p class="info-message">Selecione um treino na lista acima.</p>';
-            downloadContainer.innerHTML = ''; // Limpa o botão de download ao trocar a categoria
+            actionsContainer.innerHTML = ''; 
+            tabsContainer.innerHTML = '';
+            currentWorkoutData = null;
 
             if (!selectedCategoryPrefix) {
                 workoutSelect.disabled = true;
@@ -249,27 +286,23 @@
 
         async function fetchAndRenderWorkout(workoutFile) {
             const display = document.getElementById('workout-display');
-            const downloadContainer = document.getElementById('download-container');
+            const actionsContainer = document.getElementById('actions-container');
+            const tabsContainer = document.getElementById('tabs-container');
             
-            // Limpa o conteúdo anterior
             display.innerHTML = '<p class="info-message">Carregando treino...</p>';
-            downloadContainer.innerHTML = '';
+            tabsContainer.innerHTML = '';
+            actionsContainer.innerHTML = '';
             currentWorkoutData = null;
-            currentWorkoutFilename = null;
 
             try {
                 const response = await fetch(`./treinos/${workoutFile}`);
                 if (!response.ok) throw new Error(`Arquivo não encontrado: ${workoutFile}`);
                 
-                // Clona a resposta para poder ler o JSON e guardar o original
                 const workoutData = await response.json();
-
-                // Guarda os dados e o nome do arquivo para o download
                 currentWorkoutData = workoutData;
-                currentWorkoutFilename = workoutFile;
 
-                renderWorkout(workoutData);
-                createDownloadButton(); // Cria o botão após renderizar o treino
+                renderWorkoutWithTabs(workoutData);
+                createActionButtons();
 
             } catch (error) {
                 console.error("Erro ao carregar o treino:", error);
@@ -277,92 +310,138 @@
             }
         }
         
-        function renderWorkout(data) {
+        function renderWorkoutWithTabs(data) {
             const display = document.getElementById('workout-display');
+            const tabsContainer = document.getElementById('tabs-container');
             display.innerHTML = '';
+            tabsContainer.innerHTML = '';
 
             if (!data.workouts || Object.keys(data.workouts).length === 0) {
                 display.innerHTML = `<p class="info-message">Este arquivo de treino parece estar vazio ou no formato incorreto.</p>`;
                 return;
             }
 
-            for (const dayKey in data.workouts) {
+            const workoutDays = Object.keys(data.workouts);
+
+            workoutDays.forEach((dayKey, index) => {
+                const titleInfo = data.tabNames[dayKey];
+
+                // Criar Aba (Tab)
+                const tabLink = document.createElement('button');
+                tabLink.className = 'tab-link';
+                tabLink.dataset.tab = dayKey;
+                tabLink.innerHTML = `<span class="tab-title">${titleInfo.title}</span><span class="tab-subtitle">${titleInfo.subtitle}</span>`;
+                tabsContainer.appendChild(tabLink);
+
+                // Criar Conteúdo do Treino
+                const workoutContent = document.createElement('div');
+                workoutContent.id = `content-${dayKey}`;
+                workoutContent.className = 'workout-content';
+                
                 const dayCard = document.createElement('div');
                 dayCard.className = 'workout-day-card';
-                
-                const titleInfo = data.tabNames[dayKey];
-                const dayTitle = document.createElement('h2');
-                dayTitle.textContent = `${titleInfo.title} ${titleInfo.subtitle}`;
-                dayCard.appendChild(dayTitle);
-                
+
                 const exercisesArray = data.workouts[dayKey];
                 
                 exercisesArray.forEach(exercise => {
                     const exerciseItem = document.createElement('div');
                     exerciseItem.className = 'exercise-item';
-
-                    const gif_url = exercise.image;
-                    const nome = exercise.name;
-                    const series = exercise.series;
-                    const repeticoes = exercise.reps;
                     
                     exerciseItem.innerHTML = `
-                        <img src="${gif_url}" alt="${nome}" onerror="this.src='https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/icone_treino.jpg';">
+                        <img src="${exercise.image}" alt="${exercise.name}" onerror="this.src='https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/icone_treino.jpg';">
                         <div class="exercise-details">
-                            <p class="exercise-name">${nome}</p>
-                            <p class="exercise-meta">Séries: ${series} | Repetições: ${repeticoes}</p>
+                            <p class="exercise-name">${exercise.name}</p>
+                            <p class="exercise-meta">Séries: ${exercise.series} | Repetições: ${exercise.reps}</p>
                         </div>
                     `;
                     dayCard.appendChild(exerciseItem);
                 });
+                workoutContent.appendChild(dayCard);
+                display.appendChild(workoutContent);
 
-                display.appendChild(dayCard);
-            }
+                // Lógica de clique na aba
+                tabLink.addEventListener('click', () => {
+                    document.querySelectorAll('.tab-link').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.workout-content').forEach(c => c.classList.remove('active'));
+                    tabLink.classList.add('active');
+                    workoutContent.classList.add('active');
+                });
+
+                // Ativar a primeira aba por padrão
+                if (index === 0) {
+                    tabLink.classList.add('active');
+                    workoutContent.classList.add('active');
+                }
+            });
         }
 
-        // NOVO: Função para criar o botão de download
-        function createDownloadButton() {
-            const downloadContainer = document.getElementById('download-container');
-            downloadContainer.innerHTML = ''; // Limpa qualquer botão anterior
+        function createActionButtons() {
+            const actionsContainer = document.getElementById('actions-container');
+            actionsContainer.innerHTML = '';
 
-            if (!currentWorkoutFilename) return;
+            if (!currentWorkoutData) return;
 
-            const button = document.createElement('button');
-            button.id = 'download-btn';
-            button.textContent = `Baixar Treino`;
-            button.onclick = downloadCurrentWorkout;
+            // Botão de Download
+            const downloadButton = document.createElement('button');
+            downloadButton.className = 'action-btn';
+            downloadButton.innerHTML = `<i class="fas fa-file-download"></i> Baixar Treino`;
+            downloadButton.onclick = downloadCurrentWorkout;
+            actionsContainer.appendChild(downloadButton);
 
-            downloadContainer.appendChild(button);
+            // Botão de Salvar
+            const saveButton = document.createElement('button');
+            saveButton.id = 'save-btn'
+            saveButton.className = 'action-btn';
+            saveButton.innerHTML = `<i class="fas fa-save"></i> Salvar no Meu Treino`;
+            saveButton.onclick = saveToMyWorkouts;
+            actionsContainer.appendChild(saveButton);
         }
 
-        // NOVO: Função que realiza o download do arquivo JSON
         function downloadCurrentWorkout() {
-            if (!currentWorkoutData || !currentWorkoutFilename) {
+            if (!currentWorkoutData) {
                 alert("Não há dados de treino para baixar.");
                 return;
             }
 
-            // Converte o objeto JSON para uma string formatada
-            const jsonString = JSON.stringify(currentWorkoutData, null, 2);
+            const categorySelect = document.getElementById('category-select');
+            const workoutSelect = document.getElementById('workout-select');
             
-            // Cria um "Blob", que é um objeto semelhante a um arquivo
+            const categoryName = categorySelect.options[categorySelect.selectedIndex].text.replace(/ /g, '_');
+            const workoutName = workoutSelect.options[workoutSelect.selectedIndex].text.replace(/ /g, '_');
+            const filename = `${categoryName}_${workoutName}.json`;
+
+            const jsonString = JSON.stringify(currentWorkoutData, null, 2);
             const blob = new Blob([jsonString], { type: 'application/json' });
-
-            // Cria uma URL temporária para o Blob
             const url = URL.createObjectURL(blob);
-
-            // Cria um link (âncora) temporário para iniciar o download
             const a = document.createElement('a');
             a.href = url;
-            a.download = currentWorkoutFilename; // Define o nome do arquivo a ser baixado
-            
-            // Adiciona o link ao corpo do documento, clica nele e depois o remove
+            a.download = filename;
             document.body.appendChild(a);
-a.click();
+            a.click();
             document.body.removeChild(a);
-
-            // Libera a URL do Blob da memória
             URL.revokeObjectURL(url);
+        }
+
+        function saveToMyWorkouts() {
+            if (!currentWorkoutData) {
+                alert("Nenhum treino selecionado para salvar.");
+                return;
+            }
+
+            if (confirm("Isso irá substituir seus treinos atuais na página principal. Deseja continuar?")) {
+                try {
+                    localStorage.setItem('workouts', JSON.stringify(currentWorkoutData.workouts));
+                    localStorage.setItem('tabNames', JSON.stringify(currentWorkoutData.tabNames));
+                    // Define a aba ativa para ser a primeira do novo treino
+                    localStorage.setItem('lastActiveTab', Object.keys(currentWorkoutData.workouts)[0]);
+
+                    alert("Treino salvo com sucesso! Você será redirecionado para a página principal.");
+                    window.location.href = '.'; // Redireciona para o index.html
+                } catch (error) {
+                    console.error("Erro ao salvar o treino no localStorage:", error);
+                    alert("Ocorreu um erro ao salvar o treino. Verifique o console para mais detalhes.");
+                }
+            }
         }
     </script>
 
