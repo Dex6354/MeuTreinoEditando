@@ -1,11 +1,11 @@
-# Meu Treino v7 💪
+# Meu Treino Editando💪
 
 <p align="center">
   Um aplicativo simples e direto para gerenciar e acompanhar seus treinos de musculação. Desenvolvido para funcionar 100% offline e otimizado para acesso rápido em qualquer dispositivo.
 </p>
 
 <p align="center">
-  <strong><a href="https://dex6354.github.io/MeuTreinoV7/" target="_blank">Acesse a aplicação aqui!</a></strong>
+  <strong><a href="https://dex6354.github.io/MeuTreinoEditando/" target="_blank">Acesse a aplicação aqui!</a></strong>
 </p>
 
 ---
