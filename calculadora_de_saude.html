@@ -72,7 +72,7 @@
 
         /* --- BARRA DE IMC --- */
         #imc-visualizer { display: none; margin-top: 10px; }
-        .imc-bar-container { position: relative; width: 100%; margin-bottom: 10px; }
+        .imc-bar-container { position: relative; width: 100%; margin-bottom: 5px; } /* Diminuído margin-bottom */
         .imc-bar { display: flex; height: 15px; border-radius: 8px; overflow: hidden; }
         .imc-bar-segment { height: 100%; }
         .imc-bar-segment.underweight { background-color: #3498db; width: 14%; } /* Até 18.5 */
@@ -93,10 +93,17 @@
             transition: left 0.5s ease-out;
             box-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
-
-        .imc-legend { display: flex; justify-content: space-around; font-size: 0.7rem; color: var(--secondary-text-color); flex-wrap: wrap; gap: 5px; }
-        .imc-legend span { display: flex; align-items: center; }
-        .imc-legend .legend-color { width: 10px; height: 10px; border-radius: 50%; margin-right: 4px; }
+        
+        /* Estilos da legenda da barra de IMC ajustados */
+        .imc-legend {
+            display: flex;
+            width: 100%;
+            font-size: 0.7rem;
+            color: var(--secondary-text-color);
+        }
+        .imc-legend span {
+            text-align: center;
+        }
 
         .professional-advice {
             padding: 16px;
@@ -190,7 +197,7 @@
                 tmb = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age);
             }
 
-            // --- Renderização dos Resultados ---
+            // --- Renderização dos Resultados (com a legenda do IMC ajustada) ---
             resultsDiv.innerHTML = `
                 <div class="result-item">
                     <h3>Índice de Massa Corporal (IMC)</h3>
@@ -209,11 +216,11 @@
                              </div>
                         </div>
                         <div class="imc-legend">
-                            <span><div class="legend-color" style="background: #3498db;"></div>Abaixo</span>
-                            <span><div class="legend-color" style="background: #2ecc71;"></div>Normal</span>
-                            <span><div class="legend-color" style="background: #f1c40f;"></div>Sobrepeso</span>
-                            <span><div class="legend-color" style="background: #e67e22;"></div>Obes. I</span>
-                            <span><div class="legend-color" style="background: #c0392b;"></div>Obes. II+</span>
+                            <span style="width: 14%;">Abaixo</span>
+                            <span style="width: 26%;">Normal</span>
+                            <span style="width: 20%;">Sobrepeso</span>
+                            <span style="width: 20%;">Obes. I</span>
+                            <span style="width: 20%;">Obes. II+</span>
                         </div>
                     </div>
                 </div>
