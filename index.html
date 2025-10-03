@@ -7,6 +7,7 @@
     <link rel="icon" href="https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/favicon.png" type="image/jpg">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.14.0/Sortable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
     <style>
         :root {
             --bg-color: #212121;
@@ -583,13 +584,12 @@
         const autocompleteSuggestions = document.getElementById('autocomplete-suggestions');
         let currentActiveInput = null;
 
-        // --- AJUSTE: Variáveis para cache de ícones ---
+        // --- Variáveis para cache de ícones ---
         let defaultImage = "https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/icone_treino.jpg";
         const iconUrl = 'https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/icone_treino.jpg';
         const faviconUrl = 'https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/favicon.png';
         const iconCacheKey = 'appIconBase64';
         const faviconCacheKey = 'appFaviconBase64';
-        // --- FIM DO AJUSTE ---
 
         // --- Clock Function ---
         function updateClock() {
@@ -621,7 +621,7 @@
             };
         }
 
-        // --- AJUSTE: Função para cachear imagens como Base64 ---
+        // --- Função para cachear imagens como Base64 ---
         async function cacheImageAsBase64(key, url, elementSelector, attribute) {
             try {
                 const cachedImage = localStorage.getItem(key);
@@ -655,7 +655,6 @@
                 return url; // Retorna a URL original em caso de erro
             }
         }
-        // --- FIM DO AJUSTE ---
 
         async function carregarExercicios() {
             const cachedExercises = localStorage.getItem('exerciciosList');
@@ -663,7 +662,7 @@
                 try {
                     exerciciosList = JSON.parse(cachedExercises);
                     console.log("Exercícios carregados do cache!");
-                    return; // Retorna para que a inicialização continue
+                    return; 
                 } catch (error) {
                     console.error("Erro ao carregar exercícios do cache, tentando download:", error);
                     localStorage.removeItem('exerciciosList');
@@ -1089,15 +1088,16 @@
             });
         }
         
-        // --- INÍCIO: FUNÇÃO DE COMPARTILHAMENTO DE TREINO PERSONALIZADO ---
+        // --- INÍCIO: FUNÇÃO DE COMPARTILHAMENTO DE TREINO PERSONALIZADO (COM COMPRESSÃO) ---
         async function shareCustomWorkout() {
             const workoutData = { workouts, tabNames };
-            
             try {
                 const jsonString = JSON.stringify(workoutData);
-                // btoa é uma forma simples de 'comprimir' texto para transporte em URL
-                const base64String = btoa(jsonString); 
-                const shareableLink = `${window.location.origin}${window.location.pathname}#import-custom=${encodeURIComponent(base64String)}`;
+                // Comprime a string JSON para uma string segura para URL
+                const compressedString = LZString.compressToEncodedURIComponent(jsonString);
+                
+                // Usa um novo formato de hash para o link comprimido
+                const shareableLink = `${window.location.origin}${window.location.pathname}#import-compressed=${compressedString}`;
                 
                 const shareData = {
                     title: 'Meu Treino Personalizado',
@@ -1119,16 +1119,19 @@
         // --- FIM: FUNÇÃO DE COMPARTILHAMENTO ---
 
 
-        // --- INÍCIO: LÓGICA DE IMPORTAÇÃO DE TREINO PELA URL (UNIFICADA) ---
+        // --- INÍCIO: LÓGICA DE IMPORTAÇÃO DE TREINO PELA URL (UNIFICADA E COM DESCOMPRESSÃO) ---
         async function handleUrlImport() {
-            await new Promise(resolve => setTimeout(resolve, 100)); // Pequena pausa para a página renderizar
+            await new Promise(resolve => setTimeout(resolve, 100));
 
-            // 1. Tenta importar treino personalizado pelo HASH (#)
-            if (window.location.hash.startsWith('#import-custom=')) {
-                const encodedData = decodeURIComponent(window.location.hash.substring('#import-custom='.length));
+            // 1. Tenta importar treino COMPRIMIDO pelo HASH (#)
+            if (window.location.hash.startsWith('#import-compressed=')) {
+                const compressedData = window.location.hash.substring('#import-compressed='.length);
                 if (confirm("Você gostaria de importar um treino personalizado? Isso substituirá seu treino atual.")) {
                     try {
-                        const jsonString = atob(encodedData);
+                        // Descomprime a string da URL para a string JSON original
+                        const jsonString = LZString.decompressFromEncodedURIComponent(compressedData);
+                        if (!jsonString) throw new Error("Falha na descompressão dos dados.");
+
                         const workoutData = JSON.parse(jsonString);
                         if (workoutData.workouts && workoutData.tabNames) {
                             localStorage.setItem('workouts', JSON.stringify(workoutData.workouts));
@@ -1143,8 +1146,8 @@
                         alert("Não foi possível importar o treino personalizado. O link pode estar corrompido.");
                     }
                 }
-                window.location.href = window.location.pathname; // Limpa a URL e recarrega
-                return true; // Importação tentada
+                window.location.href = window.location.pathname;
+                return true;
             }
 
             // 2. Tenta importar treino da biblioteca pelo PARÂMETRO (?)
@@ -1166,44 +1169,30 @@
                         alert("Ocorreu um erro ao tentar importar o treino.");
                     }
                 }
-                window.location.href = window.location.pathname; // Limpa a URL e recarrega
-                return true; // Importação tentada
+                window.location.href = window.location.pathname;
+                return true;
             }
 
             return false; // Nenhuma importação a ser feita
         }
         // --- FIM: LÓGICA DE IMPORTAÇÃO ---
 
-        // --- AJUSTE: Função de inicialização do App ---
+        // --- Função de inicialização do App ---
         async function initializeApp() {
-            // Cacheia os ícones e os aplica aos elementos
             cacheImageAsBase64(faviconCacheKey, faviconUrl, 'link[rel="icon"]', 'href');
             const mainIconBase64 = await cacheImageAsBase64(iconCacheKey, iconUrl, '.header .title img', 'src');
-
-            // Atualiza a variável global da imagem padrão com a versão em cache
             defaultImage = mainIconBase64; 
-
-            // Carrega os dados dos exercícios
             await carregarExercicios();
-
-            // Inicia o app com os treinos
             iniciarApp();
-
-            // Inicia o relógio
             updateClock();
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
-            // Primeiro, verifica se há um treino para importar de qualquer tipo
             const importAttempted = await handleUrlImport();
-            
-            // Se uma importação foi tentada, a página será recarregada pela própria função de importação.
-            // Se não foi, continua a carregar a página normalmente.
             if (!importAttempted) {
                 initializeApp();
             }
         });
-        // --- FIM DO AJUSTE ---
     </script>
 </body>
 </html>
