@@ -460,36 +460,41 @@
                 return;
             }
 
-            // Constrói a URL base, assumindo que index.html está na mesma pasta.
-            // O href '.' aponta para o arquivo index do diretório.
+            // Constrói a URL de destino (longa) com o nome do arquivo JSON
             const baseUrl = new URL('.', window.location.href).href;
-            const shareUrl = `${baseUrl}?import-workout=${encodeURIComponent(selectedWorkoutFile)}`;
-
-            const shareData = {
-                title: 'Meu Treino',
-                text: 'Confira este treino que encontrei no app Meu Treino!',
-                url: shareUrl
-            };
+            const urlLonga = `${baseUrl}?import-workout=${encodeURIComponent(selectedWorkoutFile)}`;
 
             try {
-                // Usa a API de Compartilhamento nativa se disponível
+                // Chama a API para encurtar o link
+                const response = await fetch(`https://is.gd/create.php?format=json&url=${encodeURIComponent(urlLonga)}`);
+                if (!response.ok) throw new Error('A resposta da API de encurtamento não foi bem-sucedida.');
+                
+                const data = await response.json();
+                const shortUrl = data.shorturl;
+
+                if (!shortUrl) {
+                    // Fallback caso a API não retorne a URL curta
+                    throw new Error(data.errormessage || 'Não foi possível gerar o link curto.');
+                }
+
+                const shareData = {
+                    title: 'Meu Treino',
+                    text: 'Confira este treino que encontrei no app Meu Treino!',
+                    url: shortUrl // Usa o link curto aqui
+                };
+
+                // Tenta usar a API de compartilhamento nativa
                 if (navigator.share) {
                     await navigator.share(shareData);
                 } else {
-                    // Fallback para copiar o link para a área de transferência
-                    await navigator.clipboard.writeText(shareUrl);
+                    // Fallback: copia o link curto para a área de transferência
+                    await navigator.clipboard.writeText(shortUrl);
                     alert('Link de compartilhamento copiado para a área de transferência!');
                 }
             } catch (err) {
-                console.error('Erro ao compartilhar:', err);
-                // Um fallback extra caso o usuário cancele ou a API falhe
-                alert('Não foi possível usar o compartilhamento nativo. O link foi copiado para a área de transferência para que você possa colar e enviar.');
-                 try {
-                    await navigator.clipboard.writeText(shareUrl);
-                } catch (clipErr) {
-                    console.error('Erro ao copiar para a área de transferência:', clipErr);
-                    alert('Não foi possível copiar o link.');
-                }
+                console.error('Erro ao compartilhar ou encurtar o link:', err);
+                // Fallback final: se tudo falhar, avisa o usuário
+                alert('Ocorreu um erro ao gerar o link curto. Tente novamente mais tarde.');
             }
         }
 
