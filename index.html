@@ -530,6 +530,7 @@
 
         <div id="fab-buttons-container" class="fab-buttons-container">
             <div class="fab-button" onclick="addExercise()"><i class="fas fa-plus"></i></div>
+            <div class="fab-button" onclick="shareCustomWorkout()"><i class="fas fa-share-alt"></i></div>
             <div class="fab-button" onclick="saveWorkoutToFile()"><i class="fas fa-file-download"></i></div>
             <div class="fab-button" onclick="loadWorkoutFromFile()"><i class="fas fa-file-upload"></i></div>
             <div class="fab-button" onclick="clearCache()"><i class="fas fa-trash-alt"></i></div>
@@ -1087,46 +1088,91 @@
                 }
             });
         }
+        
+        // --- INÍCIO: FUNÇÃO DE COMPARTILHAMENTO DE TREINO PERSONALIZADO ---
+        async function shareCustomWorkout() {
+            const workoutData = { workouts, tabNames };
+            
+            try {
+                const jsonString = JSON.stringify(workoutData);
+                // btoa é uma forma simples de 'comprimir' texto para transporte em URL
+                const base64String = btoa(jsonString); 
+                const shareableLink = `${window.location.origin}${window.location.pathname}#import-custom=${encodeURIComponent(base64String)}`;
+                
+                const shareData = {
+                    title: 'Meu Treino Personalizado',
+                    text: 'Confira meu treino personalizado!',
+                    url: shareableLink
+                };
 
-        // --- INÍCIO: LÓGICA DE IMPORTAÇÃO DE TREINO ---
-        async function handleWorkoutImport() {
+                if (navigator.share) {
+                    await navigator.share(shareData);
+                } else {
+                    await navigator.clipboard.writeText(shareableLink);
+                    alert('Link do seu treino personalizado foi copiado para a área de transferência!');
+                }
+            } catch (error) {
+                console.error("Erro ao criar o link de compartilhamento:", error);
+                alert("Não foi possível gerar o link de compartilhamento. O treino pode ser muito grande.");
+            }
+        }
+        // --- FIM: FUNÇÃO DE COMPARTILHAMENTO ---
+
+
+        // --- INÍCIO: LÓGICA DE IMPORTAÇÃO DE TREINO PELA URL (UNIFICADA) ---
+        async function handleUrlImport() {
+            await new Promise(resolve => setTimeout(resolve, 100)); // Pequena pausa para a página renderizar
+
+            // 1. Tenta importar treino personalizado pelo HASH (#)
+            if (window.location.hash.startsWith('#import-custom=')) {
+                const encodedData = decodeURIComponent(window.location.hash.substring('#import-custom='.length));
+                if (confirm("Você gostaria de importar um treino personalizado? Isso substituirá seu treino atual.")) {
+                    try {
+                        const jsonString = atob(encodedData);
+                        const workoutData = JSON.parse(jsonString);
+                        if (workoutData.workouts && workoutData.tabNames) {
+                            localStorage.setItem('workouts', JSON.stringify(workoutData.workouts));
+                            localStorage.setItem('tabNames', JSON.stringify(workoutData.tabNames));
+                            localStorage.setItem('lastActiveTab', Object.keys(workoutData.workouts)[0]);
+                            alert("Treino personalizado importado com sucesso!");
+                        } else {
+                            throw new Error("Dados do treino personalizado são inválidos.");
+                        }
+                    } catch (error) {
+                        console.error("Erro ao importar treino personalizado:", error);
+                        alert("Não foi possível importar o treino personalizado. O link pode estar corrompido.");
+                    }
+                }
+                window.location.href = window.location.pathname; // Limpa a URL e recarrega
+                return true; // Importação tentada
+            }
+
+            // 2. Tenta importar treino da biblioteca pelo PARÂMETRO (?)
             const urlParams = new URLSearchParams(window.location.search);
             const workoutFile = urlParams.get('import-workout');
-
             if (workoutFile) {
-                // Adiciona uma pequena pausa para garantir que a página esteja visível antes do confirm
-                await new Promise(resolve => setTimeout(resolve, 100));
-
-                if (confirm("Você gostaria de importar e salvar um novo treino? Isso substituirá seu treino atual.")) {
+                if (confirm("Você gostaria de importar um treino da biblioteca? Isso substituirá seu treino atual.")) {
                     try {
-                        // O caminho para os treinos deve ser relativo à localização do index.html
                         const response = await fetch(`./treinos/${workoutFile}`);
                         if (!response.ok) throw new Error('Arquivo de treino não encontrado.');
-                        
                         const workoutData = await response.json();
 
-                        // Salva os dados do treino no localStorage
                         localStorage.setItem('workouts', JSON.stringify(workoutData.workouts));
                         localStorage.setItem('tabNames', JSON.stringify(workoutData.tabNames));
                         localStorage.setItem('lastActiveTab', Object.keys(workoutData.workouts)[0]);
-
-                        // Limpa o parâmetro da URL e recarrega a página
                         alert("Treino importado e salvo com sucesso!");
-                        window.location.href = window.location.pathname; // Recarrega a página sem o parâmetro
                     } catch (error) {
                         console.error("Erro ao importar o treino:", error);
                         alert("Ocorreu um erro ao tentar importar o treino.");
-                        window.location.href = window.location.pathname; // Limpa a URL mesmo em caso de erro
                     }
-                } else {
-                     // Se o usuário cancelar, apenas limpa a URL.
-                     window.location.href = window.location.pathname;
                 }
-                return true; // Indica que uma importação foi tentada
+                window.location.href = window.location.pathname; // Limpa a URL e recarrega
+                return true; // Importação tentada
             }
+
             return false; // Nenhuma importação a ser feita
         }
-        // --- FIM: LÓGICA DE IMPORTAÇÃO DE TREINO ---
+        // --- FIM: LÓGICA DE IMPORTAÇÃO ---
 
         // --- AJUSTE: Função de inicialização do App ---
         async function initializeApp() {
@@ -1148,10 +1194,10 @@
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
-            // Primeiro, verifica se há um treino para importar
-            const importAttempted = await handleWorkoutImport();
+            // Primeiro, verifica se há um treino para importar de qualquer tipo
+            const importAttempted = await handleUrlImport();
             
-            // Se uma importação foi tentada, a página será recarregada.
+            // Se uma importação foi tentada, a página será recarregada pela própria função de importação.
             // Se não foi, continua a carregar a página normalmente.
             if (!importAttempted) {
                 initializeApp();
