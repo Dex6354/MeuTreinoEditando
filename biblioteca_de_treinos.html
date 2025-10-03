@@ -407,21 +407,21 @@
             const saveButton = document.createElement('button');
             saveButton.id = 'save-btn'
             saveButton.className = 'action-btn';
-            saveButton.innerHTML = `<i class="fas fa-save"></i> Salvar Treino`;
+            saveButton.innerHTML = `<i class="fas fa-save"></i>`;
             saveButton.onclick = saveToMyWorkouts;
             actionsContainer.appendChild(saveButton);
             
             // Botão de Download
             const downloadButton = document.createElement('button');
             downloadButton.className = 'action-btn';
-            downloadButton.innerHTML = `<i class="fas fa-file-download"></i> Baixar Treino`;
+            downloadButton.innerHTML = `<i class="fas fa-file-download"></i>`;
             downloadButton.onclick = downloadCurrentWorkout;
             actionsContainer.appendChild(downloadButton);
 
             // Botão de Compartilhar
             const shareButton = document.createElement('button');
             shareButton.className = 'action-btn';
-            shareButton.innerHTML = `<i class="fas fa-share-alt"></i> Compartilhar`;
+            shareButton.innerHTML = `<i class="fas fa-share-alt"></i>`;
             shareButton.onclick = shareCurrentWorkout;
             actionsContainer.appendChild(shareButton);
         }
