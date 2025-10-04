@@ -1,0 +1,15 @@
+{
+  "name": "Meu Treino - Teste PWA",
+  "short_name": "MeuTreino",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffc107",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/Dex6354/MeuTreinoEditando/refs/heads/main/img/download3.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
