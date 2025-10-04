@@ -1,13 +1,13 @@
 {
-  "name": "Meu Treino - Teste PWA",
-  "short_name": "MeuTreino",
+  "name": "Meu Treino",
+  "short_name": "Meu Treino",
   "start_url": "baixar_aplicativo",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffc107",
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/Dex6354/MeuTreinoEditando/refs/heads/main/img/download3.png",
+      "src": "https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/icone_treino.jpg",
       "sizes": "192x192",
       "type": "image/png"
     }
