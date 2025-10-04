@@ -62,7 +62,7 @@
         .card h2 { font-size: 1.2rem; margin-top: 20px; margin-bottom: 10px; color: var(--primary-color); }
         .card p { font-size: 1rem; line-height: 1.5; color: var(--text-color); margin: 0 0 15px; }
         .btn-container { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; width: 100%; max-width: 350px; }
-        .btn { display: block; background-color: var(--primary-color); color: var(--bg-color); text-decoration: none; padding: 12px 20px; border-radius: var(--border-radius); text-align: center; font-weight: bold; transition: background-color 0.3s, transform 0.2s; }
+        .btn { display: block; background-color: var(--primary-color); color: var(--bg-color); text-decoration: none; padding: 12px 20px; border-radius: var(--border-radius); text-align: center; font-weight: bold; transition: background-color 0.3s, transform 0.2s; border: 2px solid transparent; }
         .btn:hover { background-color: #ffca28; transform: translateY(-2px); }
         .btn-secondary { background-color: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); }
         .btn-secondary:hover { background-color: var(--primary-color); color: var(--bg-color); }
@@ -117,9 +117,7 @@
                     <a href="https://apkpure.com/meutreino/com.wMeuTreino_19109142" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
                         <i class="fas fa-store"></i> Baixar via APKPure
                     </a>
-                </div>
-                <div class="btn-container">
-                    <button onclick="alert('No seu navegador, toque no menu (⋮ ou •••) e selecione a opção \'Adicionar à tela inicial\' ou \'Instalar aplicativo\'.')" class="btn">
+                    <button onclick="alert('No seu navegador, toque no menu (⋮ ou •••) e selecione a opção \'Adicionar à tela inicial\' ou \'Instalar aplicativo\'.')" class="btn btn-secondary">
                         <i class="fas fa-mobile-alt"></i> Adicionar à Tela Inicial
                     </button>
                 </div>
