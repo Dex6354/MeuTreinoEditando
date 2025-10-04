@@ -56,19 +56,6 @@
         .download-link:hover { transform: translateY(-2px); }
         .download-link img { width: 100%; height: auto; display: block; border-radius: var(--border-radius); object-fit: cover; }
 
-        /* indicador visual opcional quando pronto para instalar */
-        .download-link.ready::after {
-            content: "Instalar";
-            position: absolute;
-            right: 8px;
-            bottom: 8px;
-            background: rgba(0,0,0,0.5);
-            color: white;
-            font-size: 12px;
-            padding: 4px 8px;
-            border-radius: 8px;
-        }
-
         .footer { text-align: center; padding: 8px 16px; color: var(--secondary-text-color); font-size: 0.875rem; background-color: #282828; margin-top: auto; width: 100%; }
 
         @media (max-width: 600px) {
