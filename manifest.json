@@ -8,7 +8,7 @@
   "icons": [
     {
       "src": "https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/favicon.png",
-      "sizes": "492x492",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ]
