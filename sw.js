@@ -1,15 +1,19 @@
 const CACHE_NAME = "meutreino-cache-v1";
 const URLS_TO_CACHE = [
-  "/MeuTreinoEditando/",            // raiz
-  "/MeuTreinoEditando/index.html",  // página inicial
-  "/MeuTreinoEditando/baixar_aplicativo.html", 
-  "/MeuTreinoEditando/todos_exercicios.html",
-  "/MeuTreinoEditando/biblioteca_de_treinos.html",
-  "/MeuTreinoEditando/calculadora_de_saude.html",
-  "/MeuTreinoEditando/personal_trainer.html",
-  "/MeuTreinoEditando/sobre.html",
+  "/MeuTreino/",            // raiz
+  "/MeuTreino/index.html",  // página inicial
+  "/MeuTreino/todos-exercicios.html",
+  "/MeuTreino/biblioteca-de-treinos.html",
+  "/MeuTreino/calculadora-de-saude.html",
+  "/MeuTreino/personal-trainer.html",
+  "/MeuTreino/baixar-aplicativo.html", 
+  "/MeuTreino/sobre.html",
   "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css",
   "https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/icone_treino.jpg",
+  "https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/anuncie_aqui.gif",
+  "https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/personal1.gif",
+  "https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/download1.png",
+  "https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/download2.png",
   "https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/download3.png"
 ];
 
