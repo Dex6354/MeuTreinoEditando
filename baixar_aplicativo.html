@@ -50,11 +50,40 @@
             margin-bottom: 24px;
         }
         .card p { font-size: 1rem; line-height: 1.5; color: var(--text-color); margin: 0 0 15px; }
-        .btn-container { display: flex; flex-direction: column; gap: 15px; margin: 30px auto 0; width: 100%; max-width: 350px; }
-        .btn { display: block; background-color: var(--primary-color); color: var(--bg-color); text-decoration: none; padding: 12px 20px; border-radius: var(--border-radius); text-align: center; font-weight: bold; transition: background-color 0.3s, transform 0.2s; border: 2px solid transparent; font-size: 1rem; cursor: pointer; }
-        .btn:hover { background-color: #ffca28; transform: translateY(-2px); }
-        .btn-secondary { background-color: transparent; border: 2px solid var(--primary-color); color: var(--primary-color); }
-        .btn-secondary:hover { background-color: var(--primary-color); color: var(--bg-color); }
+
+        /* Novo estilo para o contêiner de download com as imagens */
+        .btn-container { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+            margin: 30px auto 0; 
+            width: 100%; 
+            max-width: 350px; 
+        }
+
+        /* Novo estilo para os links de imagem */
+        .download-link {
+            display: block;
+            text-decoration: none;
+            padding: 0; /* Remove padding padrão do botão */
+            border-radius: var(--border-radius);
+            overflow: hidden; /* Garante que a borda arredondada se aplique à imagem */
+            transition: transform 0.2s;
+            line-height: 0; /* Remove espaço extra abaixo da imagem */
+        }
+        .download-link:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Novo estilo para as imagens de download */
+        .download-link img {
+            width: 100%; /* Ocupa a largura total do contêiner do link */
+            height: auto;
+            display: block;
+            border-radius: var(--border-radius); /* Aplica a borda arredondada na imagem */
+            object-fit: cover;
+        }
+
         .footer { text-align: center; padding: 8px 16px; color: var(--secondary-text-color); font-size: 0.875rem; background-color: #282828; margin-top: auto; width: 100%; }
 
         @media (max-width: 600px) {
@@ -98,15 +127,17 @@
             <p style="color: var(--secondary-text-color);">Instale o aplicativo em seu dispositivo Android para ter acesso rápido a todas as funcionalidades.</p>
 
             <div class="btn-container">
-                <a href="https://github.com/Dex6354/MeuTreinoEditando/releases/download/1.0/Meu_Treino_1.0.apk" class="btn">
-                    <i class="fas fa-download"></i> Baixar APK
+                <a href="https://github.com/Dex6354/MeuTreinoEditando/releases/download/1.0/Meu_Treino_1.0.apk" class="download-link" target="_blank" rel="noopener noreferrer">
+                    <img src="https://raw.githubusercontent.com/Dex6354/MeuTreinoEditando/refs/heads/main/img/download1.png" alt="Download na APKPure">
                 </a>
-                <a href="https://apkpure.com/meutreino/com.wMeuTreino_19109142" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
-                    <i class="fas fa-store"></i> Baixar via APKPure
+                
+                <a href="https://apkpure.com/meutreino/com.wMeuTreino_19109142" class="download-link">
+                    <img src="https://raw.githubusercontent.com/Dex6354/MeuTreinoEditando/refs/heads/main/img/download2.png" alt="Download APK Android">
                 </a>
-                <button onclick="alert('No seu navegador, toque no menu (⋮ ou •••) e selecione a opção \'Adicionar à tela inicial\' ou \'Instalar aplicativo\'.')" class="btn btn-secondary">
-                    <i class="fas fa-mobile-alt"></i> Adicionar à Tela Inicial
-                </button>
+                
+                <a onclick="alert('No seu navegador, toque no menu (⋮ ou •••) e selecione a opção \'Adicionar à tela inicial\' ou \'Instalar aplicativo\'.')" class="download-link">
+                    <img src="https://raw.githubusercontent.com/Dex6354/MeuTreinoEditando/refs/heads/main/img/download3.png" alt="Opção de Download 3">
+                </a>
             </div>
         </div>
 
