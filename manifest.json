@@ -1,7 +1,7 @@
 {
   "name": "Meu Treino - Teste PWA",
   "short_name": "MeuTreino",
-  "start_url": "index.html",
+  "start_url": "baixar_aplicativo",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#ffc107",
