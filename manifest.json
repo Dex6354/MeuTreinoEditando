@@ -7,7 +7,7 @@
   "theme_color": "#ffc107",
   "icons": [
     {
-      "src": "https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/icone_treino.jpg",
+      "src": "https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/favicon.png",
       "sizes": "192x192",
       "type": "image/png"
     }
