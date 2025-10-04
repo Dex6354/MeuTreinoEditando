@@ -1,70 +1,206 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teste A2HS</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Baixar Aplicativo - Meu Treino</title>
 
-  <!-- Manifesto do PWA -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#ffc107">
+    <!-- === CHAME AQUI O MANIFEST (ajuste o caminho se necessário) === -->
+    <!-- Se seu site está em https://seuusuario.github.io/MeuTreinoEditando/
+         use "/MeuTreinoEditando/manifest.json" como abaixo -->
+    <link rel="manifest" href="/MeuTreinoEditando/manifest.json">
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 40px;
-    }
-    #installBtn {
-      display: none;
-      padding: 12px 20px;
-      background: #ffc107;
-      border: none;
-      border-radius: 6px;
-      font-size: 18px;
-      cursor: pointer;
-    }
-  </style>
+    <!-- Opcional: meta theme color -->
+    <meta name="theme-color" content="#ffc107">
+
+    <link rel="icon" href="https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/favicon.png" type="image/jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #212121;
+            --card-color: #2c2c2c;
+            --text-color: #f0f0f0;
+            --secondary-text-color: #a0a0a0;
+            --primary-color: #ffc107;
+            --border-radius: 12px;
+            --input-bg-color: #383838;
+            --menu-width: 250px;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 0; display: flex; flex-direction: column; min-height: 100vh; overflow-x: hidden; }
+        *, *::before, *::after { box-sizing: border-box; }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--input-bg-color); position: sticky; top: 0; z-index: 10; background-color: var(--bg-color); }
+        .header .menu-icon { font-size: 1.5rem; cursor: pointer; color: var(--primary-color); padding: 5px; }
+        .header .header-link { text-decoration: none; color: inherit; position: absolute; left: 50%; transform: translateX(-50%); }
+        .header .title { font-size: 1.25rem; font-weight: bold; display: flex; align-items: center; }
+        .header .title img { width: 24px; height: 24px; margin-right: 8px; border-radius: 5px; }
+        .header .placeholder { width: 40px; }
+        .side-menu { height: 100%; width: 0; position: fixed; z-index: 1001; top: 0; left: 0; background-color: var(--card-color); overflow-x: hidden; transition: 0.3s; padding-top: 60px; box-shadow: 2px 0 5px rgba(0,0,0,0.5); display: flex; flex-direction: column; }
+        .side-menu.open { width: var(--menu-width); }
+        .side-menu .close-btn { position: absolute; top: 15px; right: 25px; font-size: 2rem; color: var(--primary-color); cursor: pointer; }
+        .side-menu a { padding: 15px 20px; text-decoration: none; font-size: 1.1rem; color: var(--text-color); display: block; transition: 0.3s; border-bottom: 1px solid var(--input-bg-color); }
+        .side-menu a:hover { background-color: #575757; color: var(--primary-color); }
+        .side-menu a i { color: var(--primary-color); width: 20px; text-align: center; }
+        .sponsorship-box a { border-bottom: none; }
+        .side-menu .sponsorship-box { margin-top: auto; padding: 20px; text-align: center; width: 100%; }
+        .side-menu .sponsorship-box img { max-width: 100%; border-radius: var(--border-radius); width: 100%; }
+        #page-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); z-index: 1000; display: none; transition: opacity 0.3s; }
+        #page-overlay.show { display: block; }
+
+        .container { flex-grow: 1; padding: 20px; max-width: 900px; margin: 0 auto; text-align: center; }
+        .page-title { color: var(--primary-color); text-align: center; font-size: 1.6rem; margin-top: 16px; margin-bottom: 24px; }
+        .card p { font-size: 1rem; line-height: 1.5; color: var(--text-color); margin: 0 0 15px; }
+
+        .btn-container { display: flex; flex-direction: column; gap: 15px; margin: 30px auto 0; width: 100%; max-width: 200px; }
+        .download-link { display: block; text-decoration: none; padding: 0; border-radius: var(--border-radius); overflow: hidden; transition: transform 0.2s; line-height: 0; cursor: pointer; position: relative; }
+        .download-link:hover { transform: translateY(-2px); }
+        .download-link img { width: 100%; height: auto; display: block; border-radius: var(--border-radius); object-fit: cover; }
+
+        /* indicador visual opcional quando pronto para instalar */
+        .download-link.ready::after {
+            content: "Instalar";
+            position: absolute;
+            right: 8px;
+            bottom: 8px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 8px;
+        }
+
+        .footer { text-align: center; padding: 8px 16px; color: var(--secondary-text-color); font-size: 0.875rem; background-color: #282828; margin-top: auto; width: 100%; }
+
+        @media (max-width: 600px) {
+            .side-menu.open { width: min(var(--menu-width), 80vw); }
+        }
+    </style>
 </head>
 <body>
 
-  <h1>Teste Atalho na Tela Inicial</h1>
-  <p>Se o navegador permitir, o botão abaixo vai aparecer:</p>
+    <div id="side-menu" class="side-menu">
+        <a href="javascript:void(0)" class="close-btn" onclick="closeNav()">&times;</a>
+        <a href="."><i class="fa-solid fa-dumbbell"></i> Meu Treino</a>
+        <a href="todos_exercicios"><i class="fa-solid fa-list"></i> Todos Exercícios</a>
+        <a href="biblioteca_de_treinos"><i class="fa-solid fa-book"></i> Biblioteca de Treinos</a>
+        <a href="calculadora_de_saude"><i class="fa-solid fa-calculator"></i> Calculadora de Saúde</a>
+        <a href="personal_trainer"><i class="fa-solid fa-user"></i> Personal Trainer</a>
+        <a href="baixar_aplicativo"><i class="fa-solid fa-download"></i> Baixar Aplicativo</a>
+        <a href="sobre"><i class="fa-solid fa-circle-info"></i> Sobre</a>
+        <div class="sponsorship-box">
+            <a href="mailto:contato.meutreino@outlook.com?subject=Anunciar%20no%20App%20Meu%20Treino&body=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20como%20anunciar%20meu%20perfil%20no%20app%20Meu%20Treino.">
+                <img src="https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/anuncie_aqui.gif" alt="Anuncie Aqui">
+            </a>
+        </div>
+    </div>
+    <div id="page-overlay" onclick="closeNav()"></div>
 
-  <button id="installBtn">📲 Instalar App</button>
+    <div id="main-content-wrapper">
+        <div class="header">
+            <span class="menu-icon" onclick="openNav()">&#9776;</span>
+            <a href="." class="header-link">
+                <span class="title">
+                    <img src="https://raw.githubusercontent.com/gymbr/meutreino/refs/heads/main/img/icone_treino.jpg" alt="Ícone de Treino">
+                    Meu Treino
+                </span>
+            </a>
+            <span class="placeholder"></span>
+        </div>
 
-  <script>
-    let deferredPrompt;
-    const installBtn = document.getElementById('installBtn');
+        <div class="container">
+            <h1 class="page-title">Baixar Aplicativo</h1>
+            <p style="color: var(--secondary-text-color);">Instale o aplicativo em seu dispositivo Android para ter acesso rápido a todas as funcionalidades.</p>
 
-    // Detecta se o navegador permite instalação
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      installBtn.style.display = 'inline-block';
-    });
+            <div class="btn-container">
+                <a href="https://github.com/Dex6354/MeuTreinoEditando/releases/download/1.0/Meu_Treino_1.0.apk" class="download-link" target="_blank" rel="noopener noreferrer">
+                    <img src="https://raw.githubusercontent.com/Dex6354/MeuTreinoEditando/refs/heads/main/img/download1.png" alt="Download na APKPure">
+                </a>
 
-    // Clique no botão instala
-    installBtn.addEventListener('click', () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choice) => {
-          if (choice.outcome === 'accepted') {
-            alert('✅ Usuário aceitou instalar');
-          } else {
-            alert('❌ Usuário recusou instalar');
-          }
-          deferredPrompt = null;
+                <a href="https://apkpure.com/meutreino/com.wMeuTreino_19109142" target="_blank" class="download-link">
+                    <img src="https://raw.githubusercontent.com/Dex6354/MeuTreinoEditando/refs/heads/main/img/download2.png" alt="Download APK Android">
+                </a>
+
+                <!-- Botão que dispara o prompt de instalação (tem id para JS) -->
+                <a id="installAppBtn" class="download-link" role="button" tabindex="0" aria-label="Adicionar à tela inicial">
+                    <img src="https://raw.githubusercontent.com/Dex6354/MeuTreinoEditando/refs/heads/main/img/download3.png" alt="Adicionar à tela inicial">
+                </a>
+            </div>
+        </div>
+
+        <footer class="footer">
+            Feito por quem treina, para quem treina. 💪❤️
+        </footer>
+    </div>
+
+    <script>
+        function openNav() {
+            document.getElementById("side-menu").classList.add('open');
+            document.getElementById("page-overlay").classList.add('show');
+        }
+        function closeNav() {
+            document.getElementById("side-menu").classList.remove('open');
+            document.getElementById("page-overlay").classList.remove('show');
+        }
+        document.addEventListener('keydown', (event) => { if (event.key === "Escape") closeNav(); });
+
+        // ---------- Lógica do Add to Home Screen ----------
+        // Nota: o navegador dispara `beforeinstallprompt` quando as condições de PWA são satisfeitas.
+        // Aqui guardamos o evento e o usamos quando o usuário clicar no botão.
+        let deferredPrompt;
+        const installBtn = document.getElementById('installAppBtn');
+
+        // Escuta o evento disparado pelo Chrome/Edge (Android)
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();              // evita o mini-infobar automático
+            deferredPrompt = e;              // guarda o evento para usar depois
+            // mostra um indicativo visual no botão (opcional)
+            installBtn.classList.add('ready');
+            installBtn.classList.add('ready-to-install'); // só classe visual; CSS pode usar
         });
-      }
-    });
 
-    // Registra service worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('sw.js')
-        .then(() => console.log('Service Worker registrado!'))
-        .catch(err => console.log('Erro no SW:', err));
-    }
-  </script>
+        // Clique no botão tenta abrir o prompt nativo
+        installBtn.addEventListener('click', async (ev) => {
+            ev.preventDefault();
+            if (deferredPrompt) {
+                // abre a janela de instalação nativa
+                deferredPrompt.prompt();
+                try {
+                    const choice = await deferredPrompt.userChoice;
+                    if (choice.outcome === 'accepted') {
+                        // o usuário aceitou: você pode mostrar uma mensagem, log, etc.
+                        alert('✅ App adicionado à tela inicial!');
+                    } else {
+                        alert('❌ Instalação cancelada.');
+                    }
+                } catch (err) {
+                    console.error('Erro aguardando userChoice:', err);
+                }
+                deferredPrompt = null;
+                installBtn.classList.remove('ready');
+                installBtn.classList.remove('ready-to-install');
+                return;
+            }
+
+            // Se o navegador NÃO disparou beforeinstallprompt (ex: iOS, ou Chrome que não achou elegível),
+            // mostramos instrução manual — não tem como forçar o prompt nesses casos.
+            // (mantive sua instrução original como fallback)
+            const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+            if (isIos) {
+                alert('No Safari do iPhone: toque no botão "Compartilhar" e escolha "Adicionar à Tela de Início".');
+            } else {
+                alert('ℹ️ Para adicionar, use o menu do navegador: "Adicionar à tela inicial" ou instale pelo ícone do navegador.\n\nSe você está no Chrome Android e não apareceu o prompt, verifique se o manifest.json está acessível e com start_url correto, e se a página está servida via HTTPS.');
+            }
+        });
+
+        // dica opcional: tentar registrar service worker caso exista (não é obrigatório para o prompt, mas recomendado)
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/MeuTreinoEditando/sw.js').then(() => {
+                console.log('Service Worker registrado (se sw.js existir).');
+            }).catch((err) => {
+                // se não existir, ignora — registro não é obrigatório
+                console.log('Service Worker não registrado (talvez sw.js não exista):', err.message);
+            });
+        }
+    </script>
 </body>
 </html>
